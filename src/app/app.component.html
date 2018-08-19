@@ -1,0 +1,30 @@
+<div fxLayout="column">
+  <div>
+    <div fxLayout fxLayout.lt-md="column" fxLayoutAlign="center" fxLayoutGap.xs="0">
+      <div fxFlex="100%">
+        <mat-toolbar color="primary" class="toolbar-shadow">
+          <span>
+            <a [routerLink]=[constHelper.HomePageUrl] mat-button>Home</a>
+          </span>
+          <span>
+            <a [routerLink]=[constHelper.SearchHomePageUrl] mat-button>Search</a>
+          </span>
+
+          <!-- This fills the remaining space of the current row -->
+          <span class="toolbar-fill-remaining-space"></span>
+          <span>User Account</span>
+        </mat-toolbar>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex="15" fxHide.xs></div>
+      <div fxFlex="70" fxFlex.xs="100">
+        <router-outlet></router-outlet>
+      </div>
+      <div fxFlex="15" fxHide.xs></div>
+    </div>
+  </div>
+</div>

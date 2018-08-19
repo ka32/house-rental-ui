@@ -1,0 +1,37 @@
+<!-- <h3>Find Homes for Rent in Kalaburagi</h3> -->
+<mat-divider></mat-divider>
+<form [formGroup]="searchFormGroup" novalidate autocomplete="off" (ngSubmit)="getHomePosts(searchFormGroup.value)">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+
+    <div fxFlex="30" fxFlex.lt-md="fxFill">
+      <mat-form-field class="full-width" [formGroup]="searchFormGroup">
+        <input type="text" placeholder="Locality?" aria-label="Locality" matInput [formControl]="areaControl" [matAutocomplete]="area">
+        <mat-autocomplete #area="matAutocomplete" autoActiveFirstOption [displayWith]="getAreaNameById">
+          <mat-option *ngFor="let area of filteredAreaOptions | async" [value]="area">
+            {{area.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex fxFlex.lt-md="fxfill">
+      <mat-form-field [formGroup]="searchFormGroup">
+        <input type="text" placeholder="Total Rooms" aria-label="Total Rooms" matInput [formControl]="homeTypeControl" [matAutocomplete]="homeType">
+        <mat-autocomplete #homeType="matAutocomplete" autoActiveFirstOption [displayWith]="getHomeTypeNameById">
+          <mat-option *ngFor="let homeType of filteredHomeTypeOptions | async" [value]="homeType">
+            {{homeType.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex fxFlex.lt-md="50">
+      <button mat-raised-button color="primary">Search</button>
+    </div>
+  </div>
+</form>
+<mat-divider></mat-divider>
+<div>
+  <app-search-home-results [homePosts]="homePosts" [errorMessage]="errorMessage">
+  </app-search-home-results>
+</div>
