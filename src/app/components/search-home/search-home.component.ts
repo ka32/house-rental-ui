@@ -54,6 +54,10 @@ export class SearchHomeComponent implements OnInit {
     this.getHomeTypes();
 
     this.getHomePosts(undefined);
+<<<<<<< HEAD
+=======
+
+>>>>>>> Improvise search results UI
   }
 
   private filterAreas(area: any): IArea[] {
@@ -107,6 +111,7 @@ export class SearchHomeComponent implements OnInit {
     let homeTypeId: number;
 
 // To do: Prod - remove this mock
+<<<<<<< HEAD
     if (areaId === undefined) {
       areaId = 2;
       homeTypeId = 2;
@@ -114,6 +119,17 @@ export class SearchHomeComponent implements OnInit {
       areaId = this.areaControl.value.areaId;
       homeTypeId = this.homeTypeControl.value.homeTypeId;
     }
+=======
+    if (areaId == undefined) {
+      areaId = 2;
+      homeTypeId = 2;
+    }
+    else {
+      areaId = this.areaControl.value.areaId;
+      homeTypeId = this.homeTypeControl.value.homeTypeId;
+    }
+
+>>>>>>> Improvise search results UI
 
     this.searchPostService.getHomePosts(areaId, homeTypeId)
       .subscribe(
