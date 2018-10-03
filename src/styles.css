@@ -11,10 +11,26 @@ body {
     width: 100%;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .text-right {
   text-align: right;
 }
 
 .mat-card-header-text {
   width: 100%;
+}
+
+.text-muted {
+  color: gray;
+}
+
+.text-small {
+  font-size: small;
+}
+
+mat-card {
+  max-height: 250px;
 }

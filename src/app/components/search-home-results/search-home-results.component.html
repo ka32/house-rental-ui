@@ -1,5 +1,5 @@
 <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutAlign="start start" fxLayoutAlign.lt-md="space-around center">
-  <div fxFlex="30" *ngFor="let homePost of homePosts">
+  <div fxFlex="30" *ngFor="let homePost of homePosts" >
     <mat-card>
       <mat-card-header>
         <mat-card-title fxLayout="row" fxLayoutAlign="space-between center">
@@ -21,24 +21,25 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-divider></mat-divider>
-      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-      <mat-divider></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex="50%">
+          <img class="mat-card-image" src="http://www.westpointgardens.com/wp-content/uploads/2013/09/coventry.png" alt="Photo of a Shiba Inu" />
+        </div>
+        <div fxFlex="50%">
+        More Info
+        </div>
+      </div>
       <mat-card-content>
-        <p>
+        <p class="text-center">
           Address:
-          <i class="fas fa-map-marker-alt"></i> {{homePost.addressStreet}}
+          <i class="fas fa-map-marker-alt"></i> {{homePost.addressPremiseName}} {{homePost.addressStreet}}
+                  <span class="text-muted text-small">
+          Posted 3 days ago
+        </span>
+
         </p>
       </mat-card-content>
-      <mat-card-actions>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
-
-          <button fxFlex="33" mat-raised-button color="primary">More Details</button>
-
-          <button fxFlex="30" mat-raised-button >Contact</button>
-
-        </div>
-      </mat-card-actions>
-      <div>Posted 3 days ago</div>
     </mat-card>
   </div>
 </div>

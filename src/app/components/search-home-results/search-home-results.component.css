@@ -5,12 +5,25 @@
 }
 
 .mat-card-image {
-  height: 150px;
+  height: 154px;
   width: 280px;
+  max-height: 154px;
+  max-width: 280px;
   margin: 10px;
 }
 
 .mat-card-subtitle {
   margin-bottom: 8px;
+}
+
+
+img.center {
+  display: block;
+  margin: 0 auto;
+}
+
+.mat-card-image:first-child{
+  width: 100%;
+  margin: 0 ;
 }
 
