@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>KA WebClient</title>
+  <title>{{titleService.getTitle()}}</title>
   <base href="/">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,9 +14,34 @@
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6"
     crossorigin="anonymous">
+
+  <script src="//connect.facebook.net/en_US/sdk.js"></script>
 </head>
 
 <body>
+<script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '444498579231295',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v2.9'
+            });
+            FB.AppEvents.logPageView();
+        }
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
   <app-root></app-root>
 </body>
 

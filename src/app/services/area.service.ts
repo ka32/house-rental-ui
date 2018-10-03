@@ -49,7 +49,7 @@ export class AreaService {
   getAreas(): Observable<IArea[]> {
     return this.http.get<IArea[]>(this.constHelperSvc.AreaAPIUrl)
                     .pipe(
-                      retry(3), // retry a failed request upto 3 times
+                      retry(2), // retry a failed request upto 3 times
                       catchError(this.handleError)
                     );
   }

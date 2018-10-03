@@ -1,0 +1,18 @@
+<div class="ui grid container centered">
+    <div class="six wide computer tablet only column sixteen wide mobile only column">
+        <div class="ui grey segment fb-login-container">
+            <div>
+                <span *ngIf="!showLoader || isLoginReset">Sign In</span>
+            </div>
+
+            <div class="ui grid centered" *ngIf="!showLoader || isLoginReset">
+              <button mat-stroked-button color="primary" (click)="login()">
+                    <i class="fb-login-logo fa fa-facebook-official" aria-hidden="true"></i>
+                    Continue with Facebook
+                </button>
+            </div>
+
+            <div *ngIf="showLoader">'Attempting to Sign In...'"</div>
+        </div>
+    </div>
+</div>

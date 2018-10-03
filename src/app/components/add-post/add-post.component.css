@@ -1,0 +1,13 @@
+.number-in-words {
+    font-size: 11px !important;
+    color: gray !important;
+}
+
+em {
+    color: #9f3a38;
+    text-align: right;
+}
+
+.ui.segment {
+    margin-top: 0;
+}

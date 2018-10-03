@@ -34,3 +34,7 @@ body {
 mat-card {
   max-height: 250px;
 }
+
+.toolbar{
+  height: 50px!important;
+}

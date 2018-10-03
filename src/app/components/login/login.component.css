@@ -1,0 +1,38 @@
+.ui.facebook.button {
+    background-color: #4267b2;
+    padding-left: 10px;
+    letter-spacing: .25px;
+    margin-top: 35px;
+    margin-bottom: 10px;
+}
+
+.fb-login-logo {
+    font-size: 20px;
+    padding-right: 10px;
+}
+
+.holder {
+    height: 100%;
+    text-align: center
+}
+
+.ka32-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #55b3ff;
+    letter-spacing: 1px;
+}
+
+.fb-login-container {
+    min-height: 150px;
+    margin-top: 50px!important;
+}
+
+.small-disabled-text {
+    font-size: 12px;
+    color: gray;
+}
+
+.text-capitalized {
+    text-transform: capitalize;
+}

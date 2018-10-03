@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConstHelperService } from './services/const-helper.service';
+import { AuthService } from './services/auth.service';
 
 
 @Component({
@@ -11,6 +12,16 @@ import { ConstHelperService } from './services/const-helper.service';
 export class AppComponent {
   title = 'app';
 
-  constructor(private router: Router, public constHelper: ConstHelperService) {
+  constructor(private router: Router, public constHelper: ConstHelperService, private authService: AuthService) {
   }
+
+  get isUserLoggedIn(): boolean {
+    return this.authService.isUserLoggedIn;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate([this.constHelper.HomePageUrl]);
+  }
+
 }

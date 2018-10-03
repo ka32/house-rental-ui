@@ -1,0 +1,186 @@
+<div class="ui grid container centered">
+    <div class="sixteen wide computer tablet only column sixteen wide mobile only column">
+        <h4 class="ui dividing header text-center">
+            Add New Post
+        </h4>
+        <div class="ui grey segment">
+            <!-- <div class="ui horizontal divider">Search</div> -->
+            <form class="ui form centered" [formGroup]="savePostFormGroup" novalidate autocomplete="off" (ngSubmit)="saveHomePost(savePostFormGroup.value)">
+                <div class="ui grid centered stackable">
+                    <div class="ui segment eight wide column">
+                        <h4 class="ui dividing header"><i class="fa fa-home" aria-hidden="true"></i> Home Details</h4>
+                        <div class="two fields">
+                            <div class="field" [ngClass]="{'error' : isInvalidLocality()}">
+                                <div class="fields">
+                                    <label class="field">Locality:</label>
+                                    <em class="field" *ngIf="isInvalidLocality()">Required</em>
+                                </div>
+                                <div [formGroup]="savePostFormGroup">
+                                    <select id="areaDropDown" class="ui fluid search dropdown" formControlName="areaId">
+                                        <option value="" disabled selected>In Which Locality?</option>
+                                        <option *ngFor="let area of areas" [value] = "area.areaId" >{{area.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field" [ngClass]="{'error' : isInvalidHomeType()}">
+                                <div class="fields">
+                                    <label class="field">Total Rooms:</label>
+                                    <em class="field right floated" *ngIf="isInvalidHomeType()">Required</em>
+                                </div>
+                                <div [formGroup]="savePostFormGroup">
+                                    <select placeholder="Home Type" id="homeTypeDropDown" class="ui fluid search dropdown" formControlName="homeTypeId">
+                                <option value="" disabled selected>How Many Rooms?</option>
+                                <option *ngFor="let homeType of homeTypes" [value] = "homeType.homeTypeId">{{homeType.name}}</option>
+                            </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field" [ngClass]="{'error' : isInvalidFurnishType()}">
+                                <div class="fields">
+                                    <label class="field">Furnish Type:</label>
+                                    <em class="field" *ngIf="isInvalidFurnishType()">Required</em>
+                                </div>
+                                <div [formGroup]="savePostFormGroup">
+                                    <select placeholder="Furnish Type" id="furnishTypeDropDown" class="ui fluid search dropdown" formControlName="furnishTypeId">
+                                <option value="" disabled selected>Furnished?</option>
+                                <option *ngFor="let furnishType of furnishTypes" [value] = "furnishType.furnishTypeId">{{furnishType.name}}</option>
+                            </select>
+                                </div>
+                            </div>
+                            <div class="field" [ngClass]="{'error' : isInvalidArea()}">
+                                <div class="fields">
+                                    <label class="field">Area:</label>
+                                    <em class="field" *ngIf="isInvalidArea() && sqFt.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidArea() && (sqFt.errors?.min || sqFt.errors?.max)">Should be between 25 to 10000</em>
+                                </div>
+                                <div class="ui right labeled input" [formGroup]="savePostFormGroup">
+                                    <input type="number" min="0" placeholder="Sq.Ft." id="sqFt" class="ui " formControlName="sqFt" />
+                                    <div class="ui basic label">
+                                        sq ft
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field" [ngClass]="{'error' : isInvalidRent()}">
+                                <div class="fields">
+                                    <label class="field">Rent:</label>
+                                    <em class="field" *ngIf="isInvalidRent() && rent.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidRent() && (rent.errors?.min || rent.errors?.max)">Should be between 0 to 10000000</em>
+                                </div>
+                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
+                                    <label for="amount" class="ui label"><i class="fa fa-inr" aria-hidden="true"></i></label>
+                                    <input type="number" #rentField min="0" placeholder="Rent" class="ui" formControlName="rent" (keyup)="showRentInWords(rentField.value)" (focus)="showRentLabel(true)" (blur)="showRentLabel(false)" />
+                                </div>
+                                <label class=" number-in-words">{{rentInWords}}</label>
+                            </div>
+                            <div class="field" [ngClass]="{'error' : isInvalidDeposit()}">
+                                <div class="fields">
+                                    <label class="field">Deposit:</label>
+                                    <em class="field" *ngIf="isInvalidDeposit() && deposit.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidDeposit() && (deposit.errors?.min || deposit.errors?.max)">Should be between 0 to 100000000</em>
+                                </div>
+                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
+                                    <label for="amount" class="ui label"><i class="fa fa-inr" aria-hidden="true"></i></label>
+                                    <input type="number" #depositField min="0" placeholder="Deposit" class="ui " formControlName="deposit" (keyup)="showDepositInWords(depositField.value)" (focus)="showDepositLabel(true)" (blur)="showDepositLabel(false)" />
+                                </div>
+                                <label class=" number-in-words">{{depositInWords}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment eight wide column">
+                        <h4 class="ui dividing header"><i class="fa fa-map-marker" aria-hidden="true"></i> Address</h4>
+                        <div class="two fields">
+                            <div class="field" [ngClass]="{'error' : isInvalidPremiseName()}">
+                                <div class="fields">
+                                    <label class="field">Premise Name:</label>
+                                    <em class="field" *ngIf="isInvalidPremiseName() && addressPremiseName.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidPremiseName() && addressPremiseName.errors?.minlength">Should have minimum 3 chars</em>
+                                    <em class="field" *ngIf="isInvalidPremiseName() && addressPremiseName.errors?.maxlength">Should have maximum 100 chars</em>
+                                </div>
+                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
+                                    <label class="ui label"><i class="fa fa-address-card-o" aria-hidden="true"></i></label>
+                                    <input id="addressPremiseName" type="text" placeholder="E.g. Basava Nilaya, H.No. 123/4" id="addressPremiseName" formControlName="addressPremiseName" />
+
+                                </div>
+                            </div>
+
+                            <div class="field" [ngClass]="{'error' : isInvalidStreetName()}">
+                                <div class="fields">
+                                    <label class="field">Street Name, Landmark:</label>
+                                    <em class="field" *ngIf="isInvalidStreetName() && addressStreet.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidStreetName() && addressStreet.errors?.minlength">Should have minimum 3 chars</em>
+                                    <em class="field" *ngIf="isInvalidStreetName() && addressStreet.errors?.maxlength">Should have maximum 100 chars</em>
+                                </div>
+                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
+                                    <label class="ui label"><i class="fa fa-road" aria-hidden="true"></i></label>
+                                    <input type="text" placeholder="E.g. 2nd Cross, opp. Sai Temple" id="addressStreet" class="ui " formControlName="addressStreet" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field" [ngClass]="{'error' : isInvalidContactName()}">
+                                <div class="fields">
+                                    <label class="field">Contact Name:</label>
+                                    <em class="field" *ngIf="isInvalidContactName() && contactPerson.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidContactName() && contactPerson.errors?.minlength">Should have minimum 3 chars</em>
+                                    <em class="field" *ngIf="isInvalidContactName() && contactPerson.errors?.maxlength">Should have maximum 100 chars</em>
+                                </div>
+                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
+                                    <label class="ui label"><i class="fa fa-user" aria-hidden="true"></i></label>
+                                    <input type="text" placeholder="Contact Person" id="contactPerson" class="ui " formControlName="contactPerson" />
+                                </div>
+                            </div>
+                            <div class="field" [ngClass]="{'error' : isInvalidContactPhone()}">
+                                <div class="fields">
+                                    <label class="field">Contact Phone:</label>
+                                    <em class="field" *ngIf="isInvalidContactPhone() && contactPhone.errors?.required">Required</em>
+                                    <em class="field" *ngIf="isInvalidContactPhone() && (contactPhone.errors?.min || contactPhone.errors?.max)">Should have 10 digits</em>
+                                </div>
+                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
+                                    <label class="ui label"><i class="fa fa-phone" aria-hidden="true"></i></label>
+                                    <input type="number" min="1000000000" placeholder="Contact Phone" id="contactPhone" class="ui " formControlName="contactPhone" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="computer tablet only six wide column right floated">
+                        <div class="ui grid">
+                            <div class="three wide column right floated">
+                                <button (click)="cancelPost()" class="ui secondary button">Cancel</button>
+                            </div>
+                            <div class="seven wide column right floated">
+                                <button type="submit " class="ui primary button fluid"><i class="fa fa-home"></i>
+                                    <span class="margin-left-5">Save Post</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mobile only ten wide column">
+                        <button type="submit " class="ui primary button fluid"><i class="fa fa-home"></i>
+                            <span class="margin-left-5">Save Post</span>
+                        </button>
+                    </div>
+
+                    <div class="mobile only ten wide column">
+                        <button type=" " class="ui secondary button fluid" (click)="cancel()">Cancel</button>
+                    </div>
+
+                </div>
+            </form>
+
+
+            <div class="ui error message " *ngIf="isInvalidForm()">
+                <div class="header">
+                    Please enter all details to submit the post.
+                </div>
+            </div>
+
+           <!-- <app-loader *ngIf="showLoader" [loaderMessage]="'Attempting to Save Post...'"></app-loader> -->
+
+        </div>
+    </div>
+</div>
