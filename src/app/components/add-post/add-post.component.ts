@@ -12,27 +12,16 @@ import { HomeTypeService } from './../../services/home-type.service';
 import { AddPostService } from './../../services/add-post.service';
 import { ConstHelperService } from './../../services/const-helper.service';
 import { Title } from '@angular/platform-browser';
+import { startWith, map } from 'rxjs/operators';
 @Component({
   templateUrl: './add-post.component.html',
   styleUrls: ['./add-post.component.css']
 })
 export class AddPostComponent implements OnInit {
+  private areaControl: FormControl;
+  private homeTypeControl: FormControl;
+  private furnishTypeControl: FormControl;
 
-  showLoader = false;
-
-  savePostFormGroup: FormGroup;
-  areas: IArea[];
-  homeTypes: IHomeType[];
-  furnishTypes: IFurnishType[];
-  errorMessage: any;
-  rentInWords: string;
-  depositInWords: string;
-
-  isSaveButtonClicked = false;
-
-  private areaCtrl: FormControl;
-  private homeTypeCtrl: FormControl;
-  private furnishTypeCtrl: FormControl;
   private sqFtCtrl: FormControl;
   private rentCtrl: FormControl;
   private depositCtrl: FormControl;
@@ -41,17 +30,31 @@ export class AddPostComponent implements OnInit {
   private contactPersonCtrl: FormControl;
   private contactPhoneCtrl: FormControl;
 
+  savePostFormGroup: FormGroup;
+  areas: IArea[];
+  homeTypes: IHomeType[];
+  furnishTypes: IFurnishType[];
+  errorMessage: any;
+  rentInWords: string;
+  depositInWords: string;
+  showLoader = false;
+
+  isSaveButtonClicked = false;
+
+  public filteredAreaOptions: Observable<IArea[]>;
+  filteredHomeTypeOptions: Observable<IHomeType[]>;
+  filteredFurnishTypeOptions: Observable<IFurnishType[]>;
+
   constructor(private addPostService: AddPostService, private areaService: AreaService,
-    private homeTypeService: HomeTypeService, private furnishTypesService: FurnishTypeService,
+    private homeTypeService: HomeTypeService, private furnishTypeService: FurnishTypeService,
     private router: Router, private constHelper: ConstHelperService, private titleService: Title) { }
 
   ngOnInit() {
-
     this.titleService.setTitle('Add New Post | ' + this.constHelper.PageTitle);
 
-    this.areaCtrl = new FormControl(this.addPostService.area, Validators.required);
-    this.homeTypeCtrl = new FormControl(this.addPostService.homeType, Validators.required);
-    this.furnishTypeCtrl = new FormControl(this.addPostService.furnishType, Validators.required);
+    this.areaControl = new FormControl(this.addPostService.area, Validators.required);
+    this.homeTypeControl = new FormControl(this.addPostService.homeType, Validators.required);
+    this.furnishTypeControl = new FormControl(this.addPostService.furnishType, Validators.required);
     this.sqFtCtrl = new FormControl(this.addPostService.sqFt, [Validators.required, Validators.min(25), Validators.max(10000)]);
     this.rentCtrl = new FormControl(this.addPostService.rent, [Validators.required, Validators.min(0), Validators.max(10000000)]);
     this.depositCtrl = new FormControl(this.addPostService.deposit, [Validators.required, Validators.min(0), Validators.max(100000000)]);
@@ -71,9 +74,9 @@ export class AddPostComponent implements OnInit {
       this.addPostService.contactPhone, [Validators.required, Validators.min(1000000000), Validators.max(9999999999)]);
 
     this.savePostFormGroup = new FormGroup({
-      areaId: this.areaCtrl,
-      homeTypeId: this.homeTypeCtrl,
-      furnishTypeId: this.furnishTypeCtrl,
+      areaId: this.areaControl,
+      homeTypeId: this.homeTypeControl,
+      furnishTypeId: this.furnishTypeControl,
       sqFt: this.sqFtCtrl,
       rent: this.rentCtrl,
       deposit: this.depositCtrl,
@@ -96,25 +99,131 @@ export class AddPostComponent implements OnInit {
   get addressPremiseName() { return this.savePostFormGroup.get('addressPremiseName'); }
   get addressStreet() { return this.savePostFormGroup.get('addressStreet'); }
 
-  getAreas(): void {
-    this.areaService.getAreas().subscribe(
-      areas => this.areas = areas,
-      error => this.errorMessage = <any>error
-    );
+  private filterAreas(area: any): IArea[] {
+    const filterValue = area === '' ? '' : area.name === undefined ? area.toLowerCase() : area.name.toLowerCase();
+
+    return this.areas.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  getHomeTypes(): void {
-    this.homeTypeService.getHomeTypes().subscribe(
-      homeTypes => this.homeTypes = homeTypes,
-      error => this.errorMessage = <any>error
-    );
+  private filterHomeTypes(homeType: any): IHomeType[] {
+    const filterValue = homeType === '' ? '' : homeType.name === undefined ? homeType.toLowerCase() : homeType.name.toLowerCase();
+
+    return this.homeTypes.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  getFurnishTypes(): void {
-    this.furnishTypesService.getFurnishTypes().subscribe(
-      furnishTypes => this.furnishTypes = furnishTypes,
-      error => this.errorMessage = <any>error
-    );
+  private filterFurnishTypes(furnishType: any): IFurnishType[] {
+    const filterValue = furnishType === '' ? '' :
+      furnishType.name === undefined ? furnishType.toLowerCase() : furnishType.name.toLowerCase();
+
+    return this.furnishTypes.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  private getAreas(): void {
+    this.areaService
+      .getAreas()
+      .subscribe(
+        (areas: IArea[]) => {
+          this.areas = areas;
+
+          this.filteredAreaOptions = this.areaControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.filterAreas(value))
+          );
+        },
+        error => (this.errorMessage = error)
+      );
+  }
+
+  private getHomeTypes(): void {
+    this.homeTypeService
+      .getHomeTypes()
+      .subscribe(
+        (homeTypes: IHomeType[]) => {
+          this.homeTypes = homeTypes;
+
+          this.filteredHomeTypeOptions = this.homeTypeControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.filterHomeTypes(value))
+          );
+        },
+        error => (this.errorMessage = error)
+      );
+  }
+
+  private getFurnishTypes(): void {
+    this.furnishTypeService
+      .getFurnishTypes()
+      .subscribe(
+        (furnishTypes: IFurnishType[]) => {
+          this.furnishTypes = furnishTypes;
+
+          this.filteredFurnishTypeOptions = this.furnishTypeControl.valueChanges.pipe(
+            startWith(''),
+            map(value => this.filterFurnishTypes(value))
+          );
+        },
+        error => (this.errorMessage = error)
+      );
+  }
+
+  getAreaNameById(area: IArea): string {
+    return area ? area.name : '';
+  }
+
+  getHomeTypeNameById(homeType: IHomeType): string {
+    return homeType ? homeType.name : '';
+  }
+
+  getFurnishTypeNameById(furnishType: IFurnishType): string {
+    return furnishType ? furnishType.name : '';
+  }
+
+  public get AreaErrorMessage(): string {
+    return 'Please select the Locality';
+  }
+
+  public get HomeTypeErrorMessage(): string {
+    return 'Please select total rooms';
+  }
+
+  public get FurnishTypeErrorMessage(): string {
+    return 'Please specify Furnish type';
+  }
+
+  public get SqFtErrorMessage(): string {
+    return 'Please specify Square Feet';
+  }
+
+  public get SqFtRangeErrorMessage(): string {
+    return 'square feet Should be between 25 to 10000';
+  }
+
+  public get RentErrorMessage(): string {
+    return 'Please specify Rent amount';
+  }
+
+  public get RentRangeErrorMessage(): string {
+    return 'Should be between 0 to 10000000';
+  }
+
+  public get DepositErrorMessage(): string {
+    return 'Please specify Deposit amount';
+  }
+
+  public get DepositRangeErrorMessage(): string {
+    return 'Should be between 0 to 100000000';
+  }
+
+  public get AddressPremiseNameErrorMessage(): string {
+    return 'Please specify Premise name';
+  }
+
+  public get ContactNameErrorMessage(): string {
+    return 'Please specify Contact person\`s name';
+  }
+
+  public get ContactNumberErrorMessage(): string {
+    return 'Please specify Contact numner';
   }
 
   saveHomePost(formValues): void {
@@ -174,7 +283,7 @@ export class AddPostComponent implements OnInit {
     }
   }
 
-  isInvalidLocality(): boolean {
+  isInvalidArea(): boolean {
     return this.savePostFormGroup.controls.areaId.invalid && this.isSaveButtonClicked;
   }
 
@@ -186,7 +295,7 @@ export class AddPostComponent implements OnInit {
     return this.savePostFormGroup.controls.furnishTypeId.invalid && this.isSaveButtonClicked;
   }
 
-  isInvalidArea(): boolean {
+  isInvalidSqFt(): boolean {
     return this.savePostFormGroup.controls.sqFt.invalid && this.isSaveButtonClicked;
   }
 

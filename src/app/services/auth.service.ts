@@ -31,7 +31,7 @@ export class AuthService {
       status: true
     });
 
-    FB.Event.subscribe('auth.login', r => { this.fbLoginEvent(r) });
+    FB.Event.subscribe('auth.login', r => { this.fbLoginEvent(r); });
     FB.Event.subscribe('auth.logout', r => this.fbLogoutEvent(r));
     FB.Event.subscribe('auth.statusChange', r => this.fbLoginStatusChangeEvent(r));
   }
@@ -41,19 +41,19 @@ export class AuthService {
     return this.isLoggedIn;
   }
 
-  fbLoginEvent(response): void {
+  fbLoginEvent(responseLogin): void {
     // Cookie.delete('fblo_444498579231295')
   }
 
-  fbLogoutEvent(response): void {
+  fbLogoutEvent(responseLogout): void {
     // Cookie.delete('fblo_444498579231295')
   }
 
-  fbLoginStatusChangeEvent(response) {
+  fbLoginStatusChangeEvent(responseChange) {
     // console.log('statusChangeEvent() called, ')
     // console.dir(response)
 
-    // this.isLoggedIn = (response.status === 'connected')
+    this.isLoggedIn = (responseChange.status === 'connected');
   }
 
   login(): void {
@@ -90,7 +90,7 @@ export class AuthService {
     return this.http
       .post<ILoginResponse>(this.constHelper.FBLoginAPIUrl, JSON.stringify(body), { headers: this.headers })
       .pipe(
-        tap((resp:any) => {
+        tap((resp: any) => {
 
           const loginResponse: ILoginResponse = {
             isLoggedIn: true,
@@ -99,11 +99,11 @@ export class AuthService {
               token: resp.token,
               expiration: resp.expiration
             }
-          }
+          };
 
           this.zone.run(() => {
             this.isLoggedIn = true;
-          })
+          });
 
           this.postLogin(loginResponse);
           resp = loginResponse;

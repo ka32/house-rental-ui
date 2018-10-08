@@ -18,18 +18,18 @@ import { startWith, map } from '../../../../node_modules/rxjs/operators';
   styleUrls: ['./search-home.component.css']
 })
 export class SearchHomeComponent implements OnInit {
-  areaControl = new FormControl();
-  filteredAreaOptions: Observable<IArea[]>;
+  private areaControl: FormControl;
+  private homeTypeControl: FormControl;
 
-  homeTypeControl = new FormControl();
-  filteredHomeTypeOptions: Observable<IHomeType[]>;
+  public searchFormGroup: FormGroup;
+  public areas: IArea[];
+  public homeTypes: IHomeType[];
+  public homePosts: IHomePost[];
+  public errorMessage: any;
+  public isSearchButtonClicked = false;
 
-  searchFormGroup: FormGroup;
-  areas: IArea[];
-  homeTypes: IHomeType[];
-  homePosts: IHomePost[];
-  errorMessage: any;
-  isSearchButtonClicked = false;
+  public filteredAreaOptions: Observable<IArea[]>;
+  public filteredHomeTypeOptions: Observable<IHomeType[]>;
 
   constructor(
     private searchPostService: SearchHomeService,
@@ -42,41 +42,33 @@ export class SearchHomeComponent implements OnInit {
   ngOnInit() {
     this.titleService.setTitle('Search Home | ' + this.constHelper.PageTitle);
 
-    const areaCtrl = new FormControl(
-      this.searchPostService.selectedArea,
-      Validators.required
-    );
-
-    const homeTypeCtrl = new FormControl(
-      this.searchPostService.selectedHomeType,
-      Validators.required
-    );
+    this.areaControl = new FormControl(this.searchPostService.selectedArea, Validators.required);
+    this.homeTypeControl = new FormControl(this.searchPostService.selectedHomeType, Validators.required);
 
     this.searchFormGroup = new FormGroup({
-      area: areaCtrl,
-      homeType: homeTypeCtrl
+      area: this.areaControl,
+      homeType: this.homeTypeControl
     });
 
     this.getAreas();
     this.getHomeTypes();
 
     this.getHomePosts(undefined);
-
   }
 
   private filterAreas(area: any): IArea[] {
-    const filterValue = area === "" ? "" : area.name === undefined ? area.toLowerCase() : area.name.toLowerCase();
+    const filterValue = area === '' ? '' : area.name === undefined ? area.toLowerCase() : area.name.toLowerCase();
 
     return this.areas.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private filterHomeTypes(homeType: any): IHomeType[] {
-    const filterValue = homeType === "" ? "" : homeType.name === undefined ? homeType.toLowerCase() : homeType.name.toLowerCase();
+    const filterValue = homeType === '' ? '' : homeType.name === undefined ? homeType.toLowerCase() : homeType.name.toLowerCase();
 
     return this.homeTypes.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  getAreas(): void {
+  private getAreas(): void {
     this.areaService
       .getAreas()
       .subscribe(
@@ -92,7 +84,7 @@ export class SearchHomeComponent implements OnInit {
       );
   }
 
-  getHomeTypes(): void {
+  private getHomeTypes(): void {
     this.homeTypeService
       .getHomeTypes()
       .subscribe(
@@ -115,15 +107,13 @@ export class SearchHomeComponent implements OnInit {
     let homeTypeId: number;
 
 // To do: Prod - remove this mock
-    if (areaId == undefined) {
+    if (areaId === undefined) {
       areaId = 2;
       homeTypeId = 2;
-    }
-    else {
+    } else {
       areaId = this.areaControl.value.areaId;
       homeTypeId = this.homeTypeControl.value.homeTypeId;
     }
-
 
     this.searchPostService.getHomePosts(areaId, homeTypeId)
       .subscribe(

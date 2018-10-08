@@ -1,94 +1,80 @@
-<div class="ui grid container centered">
-    <div class="sixteen wide computer tablet only column sixteen wide mobile only column">
-        <h4 class="ui dividing header text-center">
-            Add New Post
-        </h4>
-        <div class="ui grey segment">
-            <!-- <div class="ui horizontal divider">Search</div> -->
-            <form class="ui form centered" [formGroup]="savePostFormGroup" novalidate autocomplete="off" (ngSubmit)="saveHomePost(savePostFormGroup.value)">
-                <div class="ui grid centered stackable">
-                    <div class="ui segment eight wide column">
-                        <h4 class="ui dividing header"><i class="fa fa-home" aria-hidden="true"></i> Home Details</h4>
-                        <div class="two fields">
-                            <div class="field" [ngClass]="{'error' : isInvalidLocality()}">
-                                <div class="fields">
-                                    <label class="field">Locality:</label>
-                                    <em class="field" *ngIf="isInvalidLocality()">Required</em>
-                                </div>
-                                <div [formGroup]="savePostFormGroup">
-                                    <select id="areaDropDown" class="ui fluid search dropdown" formControlName="areaId">
-                                        <option value="" disabled selected>In Which Locality?</option>
-                                        <option *ngFor="let area of areas" [value] = "area.areaId" >{{area.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="field" [ngClass]="{'error' : isInvalidHomeType()}">
-                                <div class="fields">
-                                    <label class="field">Total Rooms:</label>
-                                    <em class="field right floated" *ngIf="isInvalidHomeType()">Required</em>
-                                </div>
-                                <div [formGroup]="savePostFormGroup">
-                                    <select placeholder="Home Type" id="homeTypeDropDown" class="ui fluid search dropdown" formControlName="homeTypeId">
-                                <option value="" disabled selected>How Many Rooms?</option>
-                                <option *ngFor="let homeType of homeTypes" [value] = "homeType.homeTypeId">{{homeType.name}}</option>
-                            </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="two fields">
-                            <div class="field" [ngClass]="{'error' : isInvalidFurnishType()}">
-                                <div class="fields">
-                                    <label class="field">Furnish Type:</label>
-                                    <em class="field" *ngIf="isInvalidFurnishType()">Required</em>
-                                </div>
-                                <div [formGroup]="savePostFormGroup">
-                                    <select placeholder="Furnish Type" id="furnishTypeDropDown" class="ui fluid search dropdown" formControlName="furnishTypeId">
-                                <option value="" disabled selected>Furnished?</option>
-                                <option *ngFor="let furnishType of furnishTypes" [value] = "furnishType.furnishTypeId">{{furnishType.name}}</option>
-                            </select>
-                                </div>
-                            </div>
-                            <div class="field" [ngClass]="{'error' : isInvalidArea()}">
-                                <div class="fields">
-                                    <label class="field">Area:</label>
-                                    <em class="field" *ngIf="isInvalidArea() && sqFt.errors?.required">Required</em>
-                                    <em class="field" *ngIf="isInvalidArea() && (sqFt.errors?.min || sqFt.errors?.max)">Should be between 25 to 10000</em>
-                                </div>
-                                <div class="ui right labeled input" [formGroup]="savePostFormGroup">
-                                    <input type="number" min="0" placeholder="Sq.Ft." id="sqFt" class="ui " formControlName="sqFt" />
-                                    <div class="ui basic label">
-                                        sq ft
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="two fields">
-                            <div class="field" [ngClass]="{'error' : isInvalidRent()}">
-                                <div class="fields">
-                                    <label class="field">Rent:</label>
-                                    <em class="field" *ngIf="isInvalidRent() && rent.errors?.required">Required</em>
-                                    <em class="field" *ngIf="isInvalidRent() && (rent.errors?.min || rent.errors?.max)">Should be between 0 to 10000000</em>
-                                </div>
-                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
-                                    <label for="amount" class="ui label"><i class="fa fa-inr" aria-hidden="true"></i></label>
-                                    <input type="number" #rentField min="0" placeholder="Rent" class="ui" formControlName="rent" (keyup)="showRentInWords(rentField.value)" (focus)="showRentLabel(true)" (blur)="showRentLabel(false)" />
-                                </div>
-                                <label class=" number-in-words">{{rentInWords}}</label>
-                            </div>
-                            <div class="field" [ngClass]="{'error' : isInvalidDeposit()}">
-                                <div class="fields">
-                                    <label class="field">Deposit:</label>
-                                    <em class="field" *ngIf="isInvalidDeposit() && deposit.errors?.required">Required</em>
-                                    <em class="field" *ngIf="isInvalidDeposit() && (deposit.errors?.min || deposit.errors?.max)">Should be between 0 to 100000000</em>
-                                </div>
-                                <div class="ui labeled input" [formGroup]="savePostFormGroup">
-                                    <label for="amount" class="ui label"><i class="fa fa-inr" aria-hidden="true"></i></label>
-                                    <input type="number" #depositField min="0" placeholder="Deposit" class="ui " formControlName="deposit" (keyup)="showDepositInWords(depositField.value)" (focus)="showDepositLabel(true)" (blur)="showDepositLabel(false)" />
-                                </div>
-                                <label class=" number-in-words">{{depositInWords}}</label>
-                            </div>
-                        </div>
-                    </div>
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+  <div fxFlex="60" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+
+    <form [formGroup]="savePostFormGroup" novalidate autocomplete="off" (ngSubmit)="saveHomePost(savePostFormGroup.value)">
+    <mat-card fxLayout="row wrap"  fxLayoutAlign="center center">
+      <!-- Locality -->
+      <div fxFlex="60" fxFlex.lt-lg="fxFill">
+        <mat-form-field [formGroup]="savePostFormGroup" >
+          <input  hideRequiredMarker="true" matInput type="text" placeholder="Locality?" aria-label="Locality" matInput [formControl]="areaControl" [matAutocomplete]="area">
+          <mat-autocomplete #area="matAutocomplete" autoActiveFirstOption [displayWith]="getAreaNameById">
+            <mat-option *ngFor="let area of filteredAreaOptions | async" [value]="area">
+              {{area.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="isInvalidArea()">Please select Locality</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- HomeType -->
+      <div fxFlex="40" fxFlex.lt-lg="fxFill">
+        <mat-form-field [formGroup]="savePostFormGroup">
+          <input matInput type="text" placeholder="Total Rooms" aria-label="Total Rooms" matInput [formControl]="homeTypeControl" [matAutocomplete]="homeType">
+          <mat-autocomplete #homeType="matAutocomplete" autoActiveFirstOption [displayWith]="getHomeTypeNameById">
+            <mat-option *ngFor="let homeType of filteredHomeTypeOptions | async" [value]="homeType">
+              {{homeType.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="isInvalidHomeType()">{{HomeTypeErrorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Furnish Type -->
+      <div fxFlex="60" fxFlex.lt-lg="fxFill">
+        <mat-form-field [formGroup]="savePostFormGroup">
+          <input matInput type="text" placeholder="Furnish Type" aria-label="Furnish Type" matInput [formControl]="furnishTypeControl" [matAutocomplete]="furnishType">
+          <mat-autocomplete #furnishType="matAutocomplete" autoActiveFirstOption [displayWith]="getFurnishTypeNameById">
+            <mat-option *ngFor="let furnishType of filteredFurnishTypeOptions | async" [value]="furnishType">
+              {{furnishType.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error *ngIf="isInvalidFurnishType()">{{FurnishTypeErrorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Sq.Ft -->
+      <div fxFlex="40" fxFlex.lt-md="fxFill">
+        <mat-form-field [formGroup]="savePostFormGroup">
+          <input matInput type="number" placeholder="Square Foot" formControlName="fontSize" min="10" id="sqFt" formControlName="sqFt">
+          <mat-error *ngIf="isInvalidSqFt() && sqFt.errors?.required">{{SqFtErrorMessage}}</mat-error>
+          <mat-error *ngIf="isInvalidSqFt() && (rent.errors?.min || rent.errors?.max)">{{SqFtRangeErrorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- rent -->
+      <div fxFlex="33" fxFlex.lt-md="fxFill">
+        <mat-form-field [formGroup]="savePostFormGroup">
+          <input matInput type="number" #rentField min="0" placeholder="Rent" formControlName="rent"
+            (keyup)="showRentInWords(rentField.value)" (focus)="showRentLabel(true)" (blur)="showRentLabel(false)" />
+            <mat-hint>{{rentInWords}}</mat-hint>
+          <mat-error *ngIf="isInvalidRent() && rent.errors?.required">{{RentErrorMessage}}</mat-error>
+          <mat-error *ngIf="isInvalidRent() && (rent.errors?.min || rent.errors?.max)">{{RentRangeErrorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- deposit -->
+      <div fxFlex="33" fxFlex.lt-md="fxFill">
+        <mat-form-field [formGroup]="savePostFormGroup">
+          <input matInput type="number" #depositField min="0" placeholder="Deposit" formControlName="deposit"
+            (keyup)="showDepositInWords(depositField.value)" (focus)="showDepositLabel(true)" (blur)="showDepositLabel(false)" />
+            <mat-hint>{{depositInWords}}</mat-hint>
+          <mat-error *ngIf="isInvalidDeposit() && deposit.errors?.required">{{depositErrorMessage}}</mat-error>
+          <mat-error *ngIf="isInvalidDeposit() && (deposit.errors?.min || deposit.errors?.max)">{{DepositRangeErrorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+
+
+<!--
                     <div class="ui segment eight wide column">
                         <h4 class="ui dividing header"><i class="fa fa-map-marker" aria-hidden="true"></i> Address</h4>
                         <div class="two fields">
@@ -144,7 +130,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
                     <div class="computer tablet only six wide column right floated">
                         <div class="ui grid">
@@ -168,7 +154,7 @@
                     <div class="mobile only ten wide column">
                         <button type=" " class="ui secondary button fluid" (click)="cancel()">Cancel</button>
                     </div>
-
+<!--
                 </div>
             </form>
 
@@ -177,10 +163,11 @@
                 <div class="header">
                     Please enter all details to submit the post.
                 </div>
-            </div>
+            </div> -->
 
            <!-- <app-loader *ngIf="showLoader" [loaderMessage]="'Attempting to Save Post...'"></app-loader> -->
 
-        </div>
-    </div>
+</mat-card>
+</form>
+</div>
 </div>
