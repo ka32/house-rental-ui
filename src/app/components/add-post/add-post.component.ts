@@ -1,18 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IArea } from './../../models/area.model';
 import { AreaService } from './../../services/area.service';
-import { FurnishTypeService } from './../../services/furnish-type.service';
 import { IHomeType } from './../../models/home-type.model';
-import { IFurnishType } from './../../models/furnish-type.model';
 import { HomeTypeService } from './../../services/home-type.service';
 import { AddPostService } from './../../services/add-post.service';
 import { ConstHelperService } from './../../services/const-helper.service';
 import { Title } from '@angular/platform-browser';
 import { startWith, map } from 'rxjs/operators';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  showError = false;
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return (control && control.invalid && this.showError);
+  }
+}
+
 @Component({
   templateUrl: './add-post.component.html',
   styleUrls: ['./add-post.component.css']
@@ -20,8 +27,6 @@ import { startWith, map } from 'rxjs/operators';
 export class AddPostComponent implements OnInit {
   private areaControl: FormControl;
   private homeTypeControl: FormControl;
-  private furnishTypeControl: FormControl;
-
   private sqFtCtrl: FormControl;
   private rentCtrl: FormControl;
   private depositCtrl: FormControl;
@@ -33,7 +38,6 @@ export class AddPostComponent implements OnInit {
   savePostFormGroup: FormGroup;
   areas: IArea[];
   homeTypes: IHomeType[];
-  furnishTypes: IFurnishType[];
   errorMessage: any;
   rentInWords: string;
   depositInWords: string;
@@ -43,10 +47,11 @@ export class AddPostComponent implements OnInit {
 
   public filteredAreaOptions: Observable<IArea[]>;
   filteredHomeTypeOptions: Observable<IHomeType[]>;
-  filteredFurnishTypeOptions: Observable<IFurnishType[]>;
+
+  matcher = new MyErrorStateMatcher();
 
   constructor(private addPostService: AddPostService, private areaService: AreaService,
-    private homeTypeService: HomeTypeService, private furnishTypeService: FurnishTypeService,
+    private homeTypeService: HomeTypeService,
     private router: Router, private constHelper: ConstHelperService, private titleService: Title) { }
 
   ngOnInit() {
@@ -54,7 +59,6 @@ export class AddPostComponent implements OnInit {
 
     this.areaControl = new FormControl(this.addPostService.area, Validators.required);
     this.homeTypeControl = new FormControl(this.addPostService.homeType, Validators.required);
-    this.furnishTypeControl = new FormControl(this.addPostService.furnishType, Validators.required);
     this.sqFtCtrl = new FormControl(this.addPostService.sqFt, [Validators.required, Validators.min(25), Validators.max(10000)]);
     this.rentCtrl = new FormControl(this.addPostService.rent, [Validators.required, Validators.min(0), Validators.max(10000000)]);
     this.depositCtrl = new FormControl(this.addPostService.deposit, [Validators.required, Validators.min(0), Validators.max(100000000)]);
@@ -76,7 +80,6 @@ export class AddPostComponent implements OnInit {
     this.savePostFormGroup = new FormGroup({
       areaId: this.areaControl,
       homeTypeId: this.homeTypeControl,
-      furnishTypeId: this.furnishTypeControl,
       sqFt: this.sqFtCtrl,
       rent: this.rentCtrl,
       deposit: this.depositCtrl,
@@ -88,7 +91,6 @@ export class AddPostComponent implements OnInit {
 
     this.getAreas();
     this.getHomeTypes();
-    this.getFurnishTypes();
   }
 
   get sqFt() { return this.savePostFormGroup.get('sqFt'); }
@@ -109,13 +111,6 @@ export class AddPostComponent implements OnInit {
     const filterValue = homeType === '' ? '' : homeType.name === undefined ? homeType.toLowerCase() : homeType.name.toLowerCase();
 
     return this.homeTypes.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  private filterFurnishTypes(furnishType: any): IFurnishType[] {
-    const filterValue = furnishType === '' ? '' :
-      furnishType.name === undefined ? furnishType.toLowerCase() : furnishType.name.toLowerCase();
-
-    return this.furnishTypes.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   private getAreas(): void {
@@ -150,22 +145,6 @@ export class AddPostComponent implements OnInit {
       );
   }
 
-  private getFurnishTypes(): void {
-    this.furnishTypeService
-      .getFurnishTypes()
-      .subscribe(
-        (furnishTypes: IFurnishType[]) => {
-          this.furnishTypes = furnishTypes;
-
-          this.filteredFurnishTypeOptions = this.furnishTypeControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.filterFurnishTypes(value))
-          );
-        },
-        error => (this.errorMessage = error)
-      );
-  }
-
   getAreaNameById(area: IArea): string {
     return area ? area.name : '';
   }
@@ -174,62 +153,12 @@ export class AddPostComponent implements OnInit {
     return homeType ? homeType.name : '';
   }
 
-  getFurnishTypeNameById(furnishType: IFurnishType): string {
-    return furnishType ? furnishType.name : '';
-  }
-
-  public get AreaErrorMessage(): string {
-    return 'Please select the Locality';
-  }
-
-  public get HomeTypeErrorMessage(): string {
-    return 'Please select total rooms';
-  }
-
-  public get FurnishTypeErrorMessage(): string {
-    return 'Please specify Furnish type';
-  }
-
-  public get SqFtErrorMessage(): string {
-    return 'Please specify Square Feet';
-  }
-
-  public get SqFtRangeErrorMessage(): string {
-    return 'square feet Should be between 25 to 10000';
-  }
-
-  public get RentErrorMessage(): string {
-    return 'Please specify Rent amount';
-  }
-
-  public get RentRangeErrorMessage(): string {
-    return 'Should be between 0 to 10000000';
-  }
-
-  public get DepositErrorMessage(): string {
-    return 'Please specify Deposit amount';
-  }
-
-  public get DepositRangeErrorMessage(): string {
-    return 'Should be between 0 to 100000000';
-  }
-
-  public get AddressPremiseNameErrorMessage(): string {
-    return 'Please specify Premise name';
-  }
-
-  public get ContactNameErrorMessage(): string {
-    return 'Please specify Contact person\`s name';
-  }
-
-  public get ContactNumberErrorMessage(): string {
-    return 'Please specify Contact numner';
-  }
-
   saveHomePost(formValues): void {
     this.isSaveButtonClicked = true;
 
-    if (this.savePostFormGroup.valid) {
+    if (!this.savePostFormGroup.valid) {
+      this.matcher.showError = true;
+    } else {
       this.showLoader = true;
 
       this.addPostService.savePost(formValues).subscribe(
@@ -291,10 +220,6 @@ export class AddPostComponent implements OnInit {
     return this.savePostFormGroup.controls.homeTypeId.invalid && this.isSaveButtonClicked;
   }
 
-  isInvalidFurnishType(): boolean {
-    return this.savePostFormGroup.controls.furnishTypeId.invalid && this.isSaveButtonClicked;
-  }
-
   isInvalidSqFt(): boolean {
     return this.savePostFormGroup.controls.sqFt.invalid && this.isSaveButtonClicked;
   }
@@ -326,5 +251,58 @@ export class AddPostComponent implements OnInit {
   isInvalidForm(): boolean {
     return (this.savePostFormGroup.invalid && this.isSaveButtonClicked);
   }
+
+  public get AreaErrorMessage(): string {
+    return 'Please select the Locality';
+  }
+
+  public get HomeTypeErrorMessage(): string {
+    return 'Please select Total Rooms';
+  }
+
+  public get SqFtErrorMessage(): string {
+    let errorMessage = '';
+    if (this.sqFt.hasError('required')) {
+      errorMessage = 'Please specify Square Foot';
+    } else if (this.sqFt.hasError('min') || this.sqFt.hasError('max')) {
+      errorMessage = 'Should be 25 to 10,000';
+    }
+
+    return errorMessage;
+  }
+
+  public get RentErrorMessage(): string {
+    let errorMessage = '';
+    if (this.rent.hasError('required')) {
+      errorMessage = 'Please specify Rent amount';
+    } else if (this.rent.hasError('min') || this.rent.hasError('max')) {
+      errorMessage = 'Should be 0 to 1,00,00,000';
+    }
+
+    return errorMessage;
+  }
+
+  public get DepositErrorMessage(): string {
+    if (this.deposit.hasError('required')) {
+      return 'Please specify Deposit amount';
+    } else if (this.deposit.hasError('min') || this.deposit.hasError('max')) {
+      return 'Should be 0 to 10,00,00,000';
+    }
+
+    return '';
+  }
+
+  public get AddressPremiseNameErrorMessage(): string {
+    return 'Please specify Premise name';
+  }
+
+  public get ContactNameErrorMessage(): string {
+    return 'Please specify Contact person\`s name';
+  }
+
+  public get ContactNumberErrorMessage(): string {
+    return 'Please specify Contact numner';
+  }
+
 
 }

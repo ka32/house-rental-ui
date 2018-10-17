@@ -1,79 +1,85 @@
 <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
-  <div fxFlex="60" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+    <div fxFlex="70" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+        <form [formGroup]="savePostFormGroup" novalidate autocomplete="off" (ngSubmit)="saveHomePost(savePostFormGroup.value)">
+            <mat-card>
+                <div fxLayout="row wrap"  fxLayoutAlign="center center">
+                    <!-- Locality -->
+                    <div fxFlex="60" fxFlex.lt-lg="fxFill">
+                        <mat-form-field [formGroup]="savePostFormGroup" appearance="outline">
+                            <mat-label><span matPrefix><i class="fas fa-map-marker-alt">&nbsp;&nbsp;</i></span>Locality</mat-label>
+                            <input hideRequiredMarker="true" matInput type="text" aria-label="Locality" matInput [formControl]="areaControl" [matAutocomplete]="area" [errorStateMatcher]="matcher">
+                            <mat-autocomplete #area="matAutocomplete" autoActiveFirstOption [displayWith]="getAreaNameById">
+                            <mat-option *ngFor="let area of filteredAreaOptions | async" [value]="area">
+                                {{area.name}}
+                            </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="isInvalidArea()">Please select Locality</mat-error>
+                        </mat-form-field>
+                    </div>
 
-    <form [formGroup]="savePostFormGroup" novalidate autocomplete="off" (ngSubmit)="saveHomePost(savePostFormGroup.value)">
-    <mat-card fxLayout="row wrap"  fxLayoutAlign="center center">
-      <!-- Locality -->
-      <div fxFlex="60" fxFlex.lt-lg="fxFill">
-        <mat-form-field [formGroup]="savePostFormGroup" >
-          <input  hideRequiredMarker="true" matInput type="text" placeholder="Locality?" aria-label="Locality" matInput [formControl]="areaControl" [matAutocomplete]="area">
-          <mat-autocomplete #area="matAutocomplete" autoActiveFirstOption [displayWith]="getAreaNameById">
-            <mat-option *ngFor="let area of filteredAreaOptions | async" [value]="area">
-              {{area.name}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="isInvalidArea()">Please select Locality</mat-error>
-        </mat-form-field>
-      </div>
+                    <!-- HomeType -->
+                    <div fxFlex="40" fxFlex.lt-lg="fxFill">
+                        <mat-form-field [formGroup]="savePostFormGroup" appearance="outline">
+                        <mat-label><span matPrefix><i class="fas fa-building">&nbsp;&nbsp;</i></span>Total Rooms</mat-label>
+                            <input matInput type="text" aria-label="Total Rooms" matInput [formControl]="homeTypeControl" [matAutocomplete]="homeType" [errorStateMatcher]="matcher">
+                            <mat-autocomplete #homeType="matAutocomplete" autoActiveFirstOption [displayWith]="getHomeTypeNameById">
+                            <mat-option *ngFor="let homeType of filteredHomeTypeOptions | async" [value]="homeType">
+                                {{homeType.name}}
+                            </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="isInvalidHomeType()">{{HomeTypeErrorMessage}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                    
+                <div fxLayout="row wrap"  fxLayoutAlign="center center"  class="margin-top-30">
+                    <!-- Sq.Ft -->
+                    <div fxFlex="32" fxFlex.lt-md="fxFill">
+                        <mat-form-field [formGroup]="savePostFormGroup" appearance="outline">
+                        <mat-label><span matPrefix><i class="fas fa-ruler-combined">&nbsp;&nbsp;</i></span>Square Foot</mat-label>
+                            <input matInput type="number" formControlName="fontSize" min="10" id="sqFt" formControlName="sqFt" step="50" [errorStateMatcher]="matcher">
+                            <mat-error *ngIf="isInvalidSqFt()">{{SqFtErrorMessage}}</mat-error>
+                        </mat-form-field>
+                    </div>
 
-      <!-- HomeType -->
-      <div fxFlex="40" fxFlex.lt-lg="fxFill">
-        <mat-form-field [formGroup]="savePostFormGroup">
-          <input matInput type="text" placeholder="Total Rooms" aria-label="Total Rooms" matInput [formControl]="homeTypeControl" [matAutocomplete]="homeType">
-          <mat-autocomplete #homeType="matAutocomplete" autoActiveFirstOption [displayWith]="getHomeTypeNameById">
-            <mat-option *ngFor="let homeType of filteredHomeTypeOptions | async" [value]="homeType">
-              {{homeType.name}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="isInvalidHomeType()">{{HomeTypeErrorMessage}}</mat-error>
-        </mat-form-field>
-      </div>
+                    <!-- rent -->
+                    <div fxFlex="32" fxFlex.lt-md="fxFill">
+                        <mat-form-field [formGroup]="savePostFormGroup" appearance="outline">
+                            <mat-label><span matPrefix><i class="fas fa-rupee-sign">&nbsp;&nbsp;</i>Rent</span></mat-label>
+                            <input matInput type="number" #rentField min="0" formControlName="rent"
+                            (keyup)="showRentInWords(rentField.value)" (focus)="showRentLabel(true)" (blur)="showRentLabel(false)" step="100" [errorStateMatcher]="matcher"/>
+                            <mat-hint>{{rentInWords}}</mat-hint>
+                            <mat-error *ngIf="isInvalidRent()">{{RentErrorMessage}}</mat-error>
+                        </mat-form-field>
+                    </div>
 
-      <!-- Furnish Type -->
-      <div fxFlex="60" fxFlex.lt-lg="fxFill">
-        <mat-form-field [formGroup]="savePostFormGroup">
-          <input matInput type="text" placeholder="Furnish Type" aria-label="Furnish Type" matInput [formControl]="furnishTypeControl" [matAutocomplete]="furnishType">
-          <mat-autocomplete #furnishType="matAutocomplete" autoActiveFirstOption [displayWith]="getFurnishTypeNameById">
-            <mat-option *ngFor="let furnishType of filteredFurnishTypeOptions | async" [value]="furnishType">
-              {{furnishType.name}}
-            </mat-option>
-          </mat-autocomplete>
-          <mat-error *ngIf="isInvalidFurnishType()">{{FurnishTypeErrorMessage}}</mat-error>
-        </mat-form-field>
-      </div>
+                    <!-- deposit -->
+                    <div fxFlex="36" fxFlex.lt-md="fxFill">
+                        <mat-form-field [formGroup]="savePostFormGroup" appearance="outline">
+                        <mat-label><span matPrefix><i class="fas fa-rupee-sign">&nbsp;&nbsp;</i></span>Deposit</mat-label>
+                            <input matInput type="number" #depositField min="0" formControlName="deposit"
+                            (keyup)="showDepositInWords(depositField.value)" (focus)="showDepositLabel(true)" (blur)="showDepositLabel(false)" step="100" [errorStateMatcher]="matcher"/>
+                            <mat-hint>{{depositInWords}}</mat-hint>
+                            <mat-error *ngIf="isInvalidDeposit()">{{DepositErrorMessage}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
 
-      <!-- Sq.Ft -->
-      <div fxFlex="40" fxFlex.lt-md="fxFill">
-        <mat-form-field [formGroup]="savePostFormGroup">
-          <input matInput type="number" placeholder="Square Foot" formControlName="fontSize" min="10" id="sqFt" formControlName="sqFt">
-          <mat-error *ngIf="isInvalidSqFt() && sqFt.errors?.required">{{SqFtErrorMessage}}</mat-error>
-          <mat-error *ngIf="isInvalidSqFt() && (rent.errors?.min || rent.errors?.max)">{{SqFtRangeErrorMessage}}</mat-error>
-        </mat-form-field>
-      </div>
+                <div fxLayout="row wrap" class="margin-top-30" fxLayoutAlign="end center">
+                    <div fxFlex="30" fxFlex.lt-lg="fxFill">
+                        <button (click)="cancelPost()" mat-raised-button>Cancel</button>
+                    </div>
 
-      <!-- rent -->
-      <div fxFlex="33" fxFlex.lt-md="fxFill">
-        <mat-form-field [formGroup]="savePostFormGroup">
-          <input matInput type="number" #rentField min="0" placeholder="Rent" formControlName="rent"
-            (keyup)="showRentInWords(rentField.value)" (focus)="showRentLabel(true)" (blur)="showRentLabel(false)" />
-            <mat-hint>{{rentInWords}}</mat-hint>
-          <mat-error *ngIf="isInvalidRent() && rent.errors?.required">{{RentErrorMessage}}</mat-error>
-          <mat-error *ngIf="isInvalidRent() && (rent.errors?.min || rent.errors?.max)">{{RentRangeErrorMessage}}</mat-error>
-        </mat-form-field>
-      </div>
-
-      <!-- deposit -->
-      <div fxFlex="33" fxFlex.lt-md="fxFill">
-        <mat-form-field [formGroup]="savePostFormGroup">
-          <input matInput type="number" #depositField min="0" placeholder="Deposit" formControlName="deposit"
-            (keyup)="showDepositInWords(depositField.value)" (focus)="showDepositLabel(true)" (blur)="showDepositLabel(false)" />
-            <mat-hint>{{depositInWords}}</mat-hint>
-          <mat-error *ngIf="isInvalidDeposit() && deposit.errors?.required">{{depositErrorMessage}}</mat-error>
-          <mat-error *ngIf="isInvalidDeposit() && (deposit.errors?.min || deposit.errors?.max)">{{DepositRangeErrorMessage}}</mat-error>
-        </mat-form-field>
-      </div>
-
-
+                    <div fxFlex="23" fxFlex.lt-lg="fxFill">
+                        <button type="submit" mat-raised-button color="primary"><i class="fa fa-home"></i>
+                            <span class="margin-left-5">Save Post</span>
+                        </button>
+                    </div>
+                </div>
+            </mat-card>
+        </form>
+    </div>
+</div>
 <!--
                     <div class="ui segment eight wide column">
                         <h4 class="ui dividing header"><i class="fa fa-map-marker" aria-hidden="true"></i> Address</h4>
@@ -131,34 +137,8 @@
                             </div>
                         </div>
                     </div>-->
-
-                    <div class="computer tablet only six wide column right floated">
-                        <div class="ui grid">
-                            <div class="three wide column right floated">
-                                <button (click)="cancelPost()" class="ui secondary button">Cancel</button>
-                            </div>
-                            <div class="seven wide column right floated">
-                                <button type="submit " class="ui primary button fluid"><i class="fa fa-home"></i>
-                                    <span class="margin-left-5">Save Post</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mobile only ten wide column">
-                        <button type="submit " class="ui primary button fluid"><i class="fa fa-home"></i>
-                            <span class="margin-left-5">Save Post</span>
-                        </button>
-                    </div>
-
-                    <div class="mobile only ten wide column">
-                        <button type=" " class="ui secondary button fluid" (click)="cancel()">Cancel</button>
-                    </div>
+                    
 <!--
-                </div>
-            </form>
-
-
             <div class="ui error message " *ngIf="isInvalidForm()">
                 <div class="header">
                     Please enter all details to submit the post.
@@ -167,7 +147,3 @@
 
            <!-- <app-loader *ngIf="showLoader" [loaderMessage]="'Attempting to Save Post...'"></app-loader> -->
 
-</mat-card>
-</form>
-</div>
-</div>

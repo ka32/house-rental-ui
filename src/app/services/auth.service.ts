@@ -76,7 +76,7 @@ export class AuthService {
     }
 
     this.ka32Login(response.authResponse.accessToken).subscribe(
-      resp => this.postLogin(resp),
+      resp => {},
       error => {
         this.onLoginError(error);
       }

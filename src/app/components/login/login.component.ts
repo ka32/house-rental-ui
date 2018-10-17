@@ -26,9 +26,9 @@ export class LoginComponent implements OnInit {
         this.showLoader = false;
 
         if (status.isLoggedIn === true) {
-          // this.router.navigate([this.constHelper.HomePageUrl]);
+          this.router.navigate([this.constHelper.HomePageUrl]);
         } else {
-          alert("Error: " + status.errorMessage);
+          alert('Error: ' + status.errorMessage);
         }
       });
     });

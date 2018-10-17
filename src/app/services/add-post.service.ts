@@ -26,6 +26,10 @@ export class AddPostService {
   }
 
   convertNumberToWords(amount): string {
+    if (amount.indexOf('-') > -1) {
+      return '';
+    }
+
     const words = new Array();
     words[0] = '';
     words[1] = 'One';
@@ -84,7 +88,7 @@ export class AddPostService {
         } else {
           value = (n_array[i]).toString();
         }
-        if (value !== '0') {
+        if (value !== '0' && words[value] !== undefined) {
           words_string += words[value] + ' ';
         }
         if ((i === 1 && value !== '0') || (i === 0 && value !== '0' && n_array[i + 1] === 0)) {
@@ -104,7 +108,7 @@ export class AddPostService {
         if ((i === 5 && value !== '0') || (i === 4 && value !== '0' && n_array[i + 1] === 0)) {
           words_string += 'Thousand ';
         }
-        if (i === 6 && value !== '0' && (n_array[i + 1] !== 0 && n_array[i + 2] !== 0)) {
+        if (i === 6 && value !== '0' && n_array[i + 2] != 0) {
           words_string += 'Hundred and ';
         } else if (i === 6 && value !== '0') {
           words_string += 'Hundred ';
