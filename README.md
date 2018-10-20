@@ -1,7 +1,7 @@
 # KA32 Web ClientDev
 
 ##### Technology Stack:
-  - [Angular 6](https://.angular.io/)
+  - [Angular 7](https://.angular.io/)
   - [Angular Material](http://angular.material.io)
   - [ASP.NET Core 2.1](https://www.asp.net/)
 ##### Tools
@@ -35,7 +35,7 @@
 - Chrome, Firefox Developer Edition
 - Git Bash
 - Node 8.11 or higher
-- Angular cli v6 or higher, Angular v 6.0.7
+- Angular cli v7 or higher, Angular v 7
      ```sh
      $ npm install -g @angular/cli
      ```
