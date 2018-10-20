@@ -22,6 +22,7 @@ import { TitleService } from './services/title.service';
 import { AddPostService } from './services/add-post.service';
 import { AddPostComponent } from './components/add-post/add-post.component';
 import { FurnishTypeService } from './services/furnish-type.service';
+import { SnackBarService } from './services/snack-bar.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { FurnishTypeService } from './services/furnish-type.service';
     BrowserModule, FlexLayoutModule, CustomMaterialModule, HttpClientModule
   ],
   providers: [ConstHelperService, AuthService, AuthGuardService, AnonymousAuthGuardSerivce, HomeTypeService,
-    AreaService, FurnishTypeService, SearchHomeService, TitleService, AddPostService],
+    AreaService, FurnishTypeService, SearchHomeService, TitleService, AddPostService, SnackBarService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

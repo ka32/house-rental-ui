@@ -4,6 +4,7 @@ import { ConstHelperService } from './../../services/const-helper.service';
 import { ILoginResponse } from './../../models/login-reponse';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router,
     private constHelper: ConstHelperService, private zone: NgZone,
-    private titleService: Title) { }
+    private titleService: Title, private snackBarService: SnackBarService) { }
 
   ngOnInit() {
     this.titleService.setTitle('Login | ' + this.constHelper.PageTitle);
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
         if (status.isLoggedIn === true) {
           this.router.navigate([this.constHelper.HomePageUrl]);
         } else {
-          alert('Error: ' + status.errorMessage);
+          this.snackBarService.showError('Error: ' + status.errorMessage);
         }
       });
     });

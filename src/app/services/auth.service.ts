@@ -66,7 +66,7 @@ export class AuthService {
 
   // Login to FB
   private fbLogin() {
-    FB.login(this.fbLoginResponseHandler.bind(this), { scope: 'public_profile,email' })
+    FB.login(this.fbLoginResponseHandler.bind(this), { scope: 'public_profile,email' });
   }
 
   private fbLoginResponseHandler(response: any) {
@@ -122,7 +122,7 @@ export class AuthService {
     let errorMsg = 'Failed to Sign In. ';
 
     if (error.status === 0) {
-      errorMsg += 'KA32 Servers are temporarily down.';
+      errorMsg += 'Unable to reach KA32 Servers.';
     } else if (error.status === 400 || error.status === 401) {
 
     }
