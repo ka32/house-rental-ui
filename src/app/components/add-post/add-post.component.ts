@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormGroupDirective, NgForm } from '@angular/forms';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormGroupDirective,
+  NgForm
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -12,11 +18,13 @@ import { ConstHelperService } from './../../services/const-helper.service';
 import { Title } from '@angular/platform-browser';
 import { startWith, map } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
-
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   showError = false;
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return (control && control.invalid && this.showError);
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
+    return control && control.invalid && this.showError;
   }
 }
 
@@ -50,32 +58,60 @@ export class AddPostComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
 
-  constructor(private addPostService: AddPostService, private areaService: AreaService,
+  constructor(
+    private addPostService: AddPostService,
+    private areaService: AreaService,
     private homeTypeService: HomeTypeService,
-    private router: Router, private constHelper: ConstHelperService, private titleService: Title) { }
+    private router: Router,
+    private constHelper: ConstHelperService,
+    private titleService: Title
+  ) {}
 
   ngOnInit() {
     this.titleService.setTitle('Add New Post | ' + this.constHelper.PageTitle);
 
-    this.areaControl = new FormControl(this.addPostService.area, Validators.required);
-    this.homeTypeControl = new FormControl(this.addPostService.homeType, Validators.required);
-    this.sqFtCtrl = new FormControl(this.addPostService.sqFt, [Validators.required, Validators.min(25), Validators.max(10000)]);
-    this.rentCtrl = new FormControl(this.addPostService.rent, [Validators.required, Validators.min(0), Validators.max(10000000)]);
-    this.depositCtrl = new FormControl(this.addPostService.deposit, [Validators.required, Validators.min(0), Validators.max(100000000)]);
+    this.areaControl = new FormControl(
+      this.addPostService.area,
+      Validators.required
+    );
+    this.homeTypeControl = new FormControl(
+      this.addPostService.homeType,
+      Validators.required
+    );
+    this.sqFtCtrl = new FormControl(this.addPostService.sqFt, [
+      Validators.min(25),
+      Validators.max(10000)
+    ]);
+    this.rentCtrl = new FormControl(this.addPostService.rent, [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(10000000)
+    ]);
+    this.depositCtrl = new FormControl(this.addPostService.deposit, [
+      Validators.required,
+      Validators.min(0),
+      Validators.max(100000000)
+    ]);
     this.addressPremiseNameCtrl = new FormControl(
       this.addPostService.addressPremiseName,
-      [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
+      [Validators.required, Validators.minLength(3), Validators.maxLength(100)]
+    );
 
     this.addressStreetCtrl = new FormControl(
       this.addPostService.addressStreet,
-      [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
+      [Validators.required, Validators.minLength(3), Validators.maxLength(100)]
+    );
 
     this.contactPersonCtrl = new FormControl(
       this.addPostService.contactPerson,
-      [Validators.required, Validators.minLength(3), Validators.maxLength(100)]);
+      [Validators.required, Validators.minLength(3), Validators.maxLength(100)]
+    );
 
-    this.contactPhoneCtrl = new FormControl(
-      this.addPostService.contactPhone, [Validators.required, Validators.min(1000000000), Validators.max(9999999999)]);
+    this.contactPhoneCtrl = new FormControl(this.addPostService.contactPhone, [
+      Validators.required,
+      Validators.min(1000000000),
+      Validators.max(9999999999)
+    ]);
 
     this.savePostFormGroup = new FormGroup({
       areaId: this.areaControl,
@@ -91,58 +127,86 @@ export class AddPostComponent implements OnInit {
 
     this.getAreas();
     this.getHomeTypes();
+
+    this.savePostFormGroup.valueChanges.subscribe(() => {
+      this.addPostService.canDeactivate = false;
+    });
   }
 
-  get sqFt() { return this.savePostFormGroup.get('sqFt'); }
-  get rent() { return this.savePostFormGroup.get('rent'); }
-  get deposit() { return this.savePostFormGroup.get('deposit'); }
-  get contactPerson() { return this.savePostFormGroup.get('contactPerson'); }
-  get contactPhone() { return this.savePostFormGroup.get('contactPhone'); }
-  get addressPremiseName() { return this.savePostFormGroup.get('addressPremiseName'); }
-  get addressStreet() { return this.savePostFormGroup.get('addressStreet'); }
+  get sqFt() {
+    return this.savePostFormGroup.get('sqFt');
+  }
+  get rent() {
+    return this.savePostFormGroup.get('rent');
+  }
+  get deposit() {
+    return this.savePostFormGroup.get('deposit');
+  }
+  get contactPerson() {
+    return this.savePostFormGroup.get('contactPerson');
+  }
+  get contactPhone() {
+    return this.savePostFormGroup.get('contactPhone');
+  }
+  get addressPremiseName() {
+    return this.savePostFormGroup.get('addressPremiseName');
+  }
+  get addressStreet() {
+    return this.savePostFormGroup.get('addressStreet');
+  }
 
   private filterAreas(area: any): IArea[] {
-    const filterValue = area === '' ? '' : area.name === undefined ? area.toLowerCase() : area.name.toLowerCase();
+    const filterValue =
+      area === ''
+        ? ''
+        : area.name === undefined
+        ? area.toLowerCase()
+        : area.name.toLowerCase();
 
-    return this.areas.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.areas.filter(
+      option => option.name.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
   private filterHomeTypes(homeType: any): IHomeType[] {
-    const filterValue = homeType === '' ? '' : homeType.name === undefined ? homeType.toLowerCase() : homeType.name.toLowerCase();
+    const filterValue =
+      homeType === ''
+        ? ''
+        : homeType.name === undefined
+        ? homeType.toLowerCase()
+        : homeType.name.toLowerCase();
 
-    return this.homeTypes.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.homeTypes.filter(
+      option => option.name.toLowerCase().indexOf(filterValue) === 0
+    );
   }
 
   private getAreas(): void {
-    this.areaService
-      .getAreas()
-      .subscribe(
-        (areas: IArea[]) => {
-          this.areas = areas;
+    this.areaService.getAreas().subscribe(
+      (areas: IArea[]) => {
+        this.areas = areas;
 
-          this.filteredAreaOptions = this.areaControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.filterAreas(value))
-          );
-        },
-        error => (this.errorMessage = error)
-      );
+        this.filteredAreaOptions = this.areaControl.valueChanges.pipe(
+          startWith(''),
+          map(value => this.filterAreas(value))
+        );
+      },
+      error => (this.errorMessage = error)
+    );
   }
 
   private getHomeTypes(): void {
-    this.homeTypeService
-      .getHomeTypes()
-      .subscribe(
-        (homeTypes: IHomeType[]) => {
-          this.homeTypes = homeTypes;
+    this.homeTypeService.getHomeTypes().subscribe(
+      (homeTypes: IHomeType[]) => {
+        this.homeTypes = homeTypes;
 
-          this.filteredHomeTypeOptions = this.homeTypeControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this.filterHomeTypes(value))
-          );
-        },
-        error => (this.errorMessage = error)
-      );
+        this.filteredHomeTypeOptions = this.homeTypeControl.valueChanges.pipe(
+          startWith(''),
+          map(value => this.filterHomeTypes(value))
+        );
+      },
+      error => (this.errorMessage = error)
+    );
   }
 
   getAreaNameById(area: IArea): string {
@@ -165,13 +229,15 @@ export class AddPostComponent implements OnInit {
         resp => this.onSuccessfulPost(resp),
         error => {
           this.onPostError(error);
-        });
+        }
+      );
     }
   }
 
   onSuccessfulPost(resp: any) {
     this.showLoader = false;
     alert('Post Saved Succesfully.');
+    this.addPostService.canDeactivate = true;
     this.router.navigate([this.constHelper.HomePageUrl]);
   }
 
@@ -182,7 +248,6 @@ export class AddPostComponent implements OnInit {
     if (error.status === 0) {
       errorMsg += 'KA32 Servers are temporarily down.';
     } else if (error.status === 400 || error.status === 401) {
-
     }
 
     alert(errorMsg);
@@ -213,57 +278,81 @@ export class AddPostComponent implements OnInit {
   }
 
   isInvalidArea(): boolean {
-    return this.savePostFormGroup.controls.areaId.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.areaId.invalid && this.isSaveButtonClicked
+    );
   }
 
   isInvalidHomeType(): boolean {
-    return this.savePostFormGroup.controls.homeTypeId.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.homeTypeId.invalid &&
+      this.isSaveButtonClicked
+    );
   }
 
   isInvalidSqFt(): boolean {
-    return this.savePostFormGroup.controls.sqFt.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.sqFt.invalid && this.isSaveButtonClicked
+    );
   }
 
   isInvalidRent(): boolean {
-    return this.savePostFormGroup.controls.rent.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.rent.invalid && this.isSaveButtonClicked
+    );
   }
 
   isInvalidDeposit(): boolean {
-    return this.savePostFormGroup.controls.deposit.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.deposit.invalid &&
+      this.isSaveButtonClicked
+    );
   }
 
-  isInvalidPremiseName(): boolean {
-    return this.savePostFormGroup.controls.addressPremiseName.invalid && this.isSaveButtonClicked;
+  isInvalidAddressPremiseName(): boolean {
+    return (
+      this.savePostFormGroup.controls.addressPremiseName.invalid &&
+      this.isSaveButtonClicked
+    );
   }
 
-  isInvalidStreetName(): boolean {
-    return this.savePostFormGroup.controls.addressStreet.invalid && this.isSaveButtonClicked;
+  isInvalidAddressStreetName(): boolean {
+    return (
+      this.savePostFormGroup.controls.addressStreet.invalid &&
+      this.isSaveButtonClicked
+    );
   }
 
   isInvalidContactName(): boolean {
-    return this.savePostFormGroup.controls.contactPerson.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.contactPerson.invalid &&
+      this.isSaveButtonClicked
+    );
   }
 
   isInvalidContactPhone(): boolean {
-    return this.savePostFormGroup.controls.contactPhone.invalid && this.isSaveButtonClicked;
+    return (
+      this.savePostFormGroup.controls.contactPhone.invalid &&
+      this.isSaveButtonClicked
+    );
   }
 
   isInvalidForm(): boolean {
-    return (this.savePostFormGroup.invalid && this.isSaveButtonClicked);
+    return this.savePostFormGroup.invalid && this.isSaveButtonClicked;
   }
 
   public get AreaErrorMessage(): string {
-    return 'Please select the Locality';
+    return 'Please select the Locality *';
   }
 
   public get HomeTypeErrorMessage(): string {
-    return 'Please select Total Rooms';
+    return 'Please select Total Rooms *';
   }
 
   public get SqFtErrorMessage(): string {
     let errorMessage = '';
     if (this.sqFt.hasError('required')) {
-      errorMessage = 'Please specify Square Foot';
+      errorMessage = 'Please specify Square Foot *';
     } else if (this.sqFt.hasError('min') || this.sqFt.hasError('max')) {
       errorMessage = 'Should be 25 to 10,000';
     }
@@ -274,7 +363,7 @@ export class AddPostComponent implements OnInit {
   public get RentErrorMessage(): string {
     let errorMessage = '';
     if (this.rent.hasError('required')) {
-      errorMessage = 'Please specify Rent amount';
+      errorMessage = 'Please specify Rent amount *';
     } else if (this.rent.hasError('min') || this.rent.hasError('max')) {
       errorMessage = 'Should be 0 to 1,00,00,000';
     }
@@ -283,26 +372,49 @@ export class AddPostComponent implements OnInit {
   }
 
   public get DepositErrorMessage(): string {
+    let errorMessage = '';
     if (this.deposit.hasError('required')) {
-      return 'Please specify Deposit amount';
+      errorMessage = 'Please specify Deposit amount *';
     } else if (this.deposit.hasError('min') || this.deposit.hasError('max')) {
-      return 'Should be 0 to 10,00,00,000';
+      errorMessage = 'Should be 0 to 10,00,00,000';
     }
 
-    return '';
+    return errorMessage;
   }
 
   public get AddressPremiseNameErrorMessage(): string {
-    return 'Please specify Premise name';
+    let errorMessage = '';
+    if (this.addressPremiseName.hasError('required')) {
+      errorMessage = 'Please specify Building name *';
+    } else if (
+      this.addressPremiseName.hasError('minlength') ||
+      this.addressPremiseName.hasError('maxlength')
+    ) {
+      errorMessage = 'Should have 3 to 100 characters';
+    }
+
+    return errorMessage;
+  }
+
+  public get AddressStreetNameErrorMessage(): string {
+    let errorMessage = '';
+    if (this.addressStreet.hasError('required')) {
+      errorMessage = 'Please specify Street details *';
+    } else if (
+      this.addressStreet.hasError('minlength') ||
+      this.addressStreet.hasError('maxlength')
+    ) {
+      errorMessage = 'Should have 3 to 100 characters';
+    }
+
+    return errorMessage;
   }
 
   public get ContactNameErrorMessage(): string {
-    return 'Please specify Contact person\`s name';
+    return 'Please specify Contact Person\`s name *';
   }
 
   public get ContactNumberErrorMessage(): string {
-    return 'Please specify Contact numner';
+    return 'Please specify Contact number *';
   }
-
-
 }

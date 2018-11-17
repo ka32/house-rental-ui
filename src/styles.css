@@ -31,10 +31,6 @@ body {
     font-size: small;
 }
 
-mat-card {
-    max-height: 250px;
-}
-
 .toolbar {
     height: 50px!important;
 }
@@ -45,4 +41,13 @@ mat-card {
 
 .margin-top-30 {
     margin-top: 30px;
+}
+
+.text-red {
+    color: red;
+}
+
+.clear-button {
+    font-size: small;
+    color: silver;
 }

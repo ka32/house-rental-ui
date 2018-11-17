@@ -1,11 +1,11 @@
 import { throwError as observableThrowError, Observable } from 'rxjs';
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { ConstHelperService } from './const-helper.service';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { HttpHeaderService } from './http-header.service';
 @Injectable()
 export class AddPostService {
   area: number;
@@ -19,10 +19,16 @@ export class AddPostService {
   contactPerson: string;
   contactPhone: string;
 
-  readonly headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  canDeactivate = true;
 
-  constructor(private http: HttpClient, private constHelper: ConstHelperService, private zone: NgZone,
-    private router: Router, private authService: AuthService) {
+  constructor(
+    private http: HttpClient,
+    private constHelper: ConstHelperService,
+    private zone: NgZone,
+    private router: Router,
+    private authService: AuthService,
+    private httpHeaderService: HttpHeaderService
+  ) {
   }
 
   convertNumberToWords(amount): string {
@@ -70,10 +76,10 @@ export class AddPostService {
       for (let i = 0; i < n_length; i++) {
         received_n_array[i] = number.substr(i, 1);
       }
-      for (let i = 9 - n_length, j = 0; i < 9; i++ , j++) {
+      for (let i = 9 - n_length, j = 0; i < 9; i++, j++) {
         n_array[i] = received_n_array[j];
       }
-      for (let i = 0, j = 1; i < 9; i++ , j++) {
+      for (let i = 0, j = 1; i < 9; i++, j++) {
         if (i === 0 || i === 2 || i === 4 || i === 7) {
           if (n_array[i] === 1) {
             n_array[j] = 10 + parseInt(n_array[j].toString());
@@ -86,26 +92,35 @@ export class AddPostService {
         if (i === 0 || i === 2 || i === 4 || i === 7) {
           value = (n_array[i] * 10).toString();
         } else {
-          value = (n_array[i]).toString();
+          value = n_array[i].toString();
         }
         if (value !== '0' && words[value] !== undefined) {
           words_string += words[value] + ' ';
         }
-        if ((i === 1 && value !== '0') || (i === 0 && value !== '0' && n_array[i + 1] === 0)) {
+        if (
+          (i === 1 && value !== '0') ||
+          (i === 0 && value !== '0' && n_array[i + 1] === 0)
+        ) {
           if (value.toString() === '1') {
             words_string += 'Crore ';
           } else {
             words_string += 'Crores ';
           }
         }
-        if ((i === 3 && value !== '0') || (i === 2 && value !== '0' && n_array[i + 1] === 0)) {
+        if (
+          (i === 3 && value !== '0') ||
+          (i === 2 && value !== '0' && n_array[i + 1] === 0)
+        ) {
           if (value.toString() === '1') {
             words_string += 'Lakh ';
           } else {
             words_string += 'Lakhs ';
           }
         }
-        if ((i === 5 && value !== '0') || (i === 4 && value !== '0' && n_array[i + 1] === 0)) {
+        if (
+          (i === 5 && value !== '0') ||
+          (i === 4 && value !== '0' && n_array[i + 1] === 0)
+        ) {
           words_string += 'Thousand ';
         }
         if (i === 6 && value !== '0' && n_array[i + 2] != 0) {
@@ -123,10 +138,17 @@ export class AddPostService {
   savePost(homePost): Observable<any> {
     console.log(homePost);
 
+    homePost.areaId = homePost.areaId.areaId;
+    homePost.homeTypeId = homePost.homeTypeId.homeTypeId;
+
     return this.http
-      .post<Response>(this.constHelper.HomePostAPIUrl, homePost, { headers: this.headers })
+      .post<Response>(
+        this.constHelper.HomePostAPIUrl,
+        homePost,
+        this.httpHeaderService.getHeader()
+      )
       .pipe(
-        catchError((error) => {
+        catchError(error => {
           console.error('An error occurred', error); // for demo purposes only
           if (error.status === 401) {
             this.zone.run(() => {
@@ -137,6 +159,7 @@ export class AddPostService {
           }
 
           return observableThrowError(error);
-        }));
+        })
+      );
   }
 }

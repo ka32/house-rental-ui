@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CustomMaterialModule } from './CustomMaterial.module';
@@ -23,17 +23,44 @@ import { AddPostService } from './services/add-post.service';
 import { AddPostComponent } from './components/add-post/add-post.component';
 import { FurnishTypeService } from './services/furnish-type.service';
 import { SnackBarService } from './services/snack-bar.service';
+import { SnackBarErrorComponent } from './components/snack-bar/snack-bar-error/snack-bar-error.component';
+import { HttpHeaderService } from './services/http-header.service';
+import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.service';
 
 @NgModule({
   declarations: [
-    AppComponent, HomeComponent, PageNotFoundComponent, SearchHomeComponent, SearchHomeResultsComponent, LoginComponent, AddPostComponent
+    AppComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    SearchHomeComponent,
+    SearchHomeResultsComponent,
+    LoginComponent,
+    AddPostComponent,
+    SnackBarErrorComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
-    BrowserModule, FlexLayoutModule, CustomMaterialModule, HttpClientModule
+    BrowserModule,
+    FlexLayoutModule,
+    CustomMaterialModule,
+    HttpClientModule
   ],
-  providers: [ConstHelperService, AuthService, AuthGuardService, AnonymousAuthGuardSerivce, HomeTypeService,
-    AreaService, FurnishTypeService, SearchHomeService, TitleService, AddPostService, SnackBarService],
-  bootstrap: [AppComponent]
+  providers: [
+    ConstHelperService,
+    AuthService,
+    AuthGuardService,
+    AnonymousAuthGuardSerivce,
+    HomeTypeService,
+    AreaService,
+    FurnishTypeService,
+    SearchHomeService,
+    TitleService,
+    AddPostService,
+    SnackBarService,
+    HttpHeaderService,
+    CanDeactivateAddPostService
+  ],
+  bootstrap: [AppComponent],
+  entryComponents: [SnackBarErrorComponent]
 })
-export class AppModule { }
+export class AppModule {}
