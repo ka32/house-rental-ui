@@ -20,10 +20,11 @@ import { AuthService } from './services/auth.service';
 import { LoginComponent } from './components/login/login.component';
 import { TitleService } from './services/title.service';
 import { AddPostService } from './services/add-post.service';
-import { AddPostComponent } from './components/add-post/add-post.component';
+import { AddPostComponent } from './components/post-owner/add-post/add-post.component';
 import { FurnishTypeService } from './services/furnish-type.service';
 import { SnackBarService } from './services/snack-bar.service';
 import { SnackBarErrorComponent } from './components/snack-bar/snack-bar-error/snack-bar-error.component';
+import { SnackBarInfoComponent } from './components/snack-bar/snack-bar-info/snack-bar-info.component';
 import { HttpHeaderService } from './services/http-header.service';
 import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.service';
 
@@ -36,7 +37,8 @@ import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.
     SearchHomeResultsComponent,
     LoginComponent,
     AddPostComponent,
-    SnackBarErrorComponent
+    SnackBarErrorComponent,
+    SnackBarInfoComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -61,6 +63,6 @@ import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.
     CanDeactivateAddPostService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SnackBarErrorComponent]
+  entryComponents: [SnackBarErrorComponent, SnackBarInfoComponent]
 })
 export class AppModule {}

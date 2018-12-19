@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { SearchHomeComponent } from './components/search-home/search-home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-import {AddPostComponent} from './components/add-post/add-post.component';
+import {AddPostComponent} from './components/post-owner/add-post/add-post.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { AnonymousAuthGuardSerivce } from './services/anonymous-auth-guard-serivce';

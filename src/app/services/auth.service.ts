@@ -119,10 +119,10 @@ export class AuthService {
   }
 
   private onLoginError(error: Response) {
-    let errorMsg = 'Failed to Sign In. ';
+    let errorMsg = 'Cannot Sign In. ';
 
     if (error.status === 0) {
-      errorMsg += 'Unable to reach KA32 Servers.';
+      errorMsg += 'Unable to contact KA32 Servers.';
     } else if (error.status === 400 || error.status === 401) {
 
     }

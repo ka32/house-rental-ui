@@ -8,7 +8,7 @@
                         <mat-form-field [formGroup]="savePostFormGroup">
                             <mat-label><span matPrefix><i class="fas fa-map-marker-alt">&nbsp;&nbsp;</i></span>Locality</mat-label>
                             <input matInput type="text" aria-label="Locality" matInput [formControl]="areaControl" [matAutocomplete]="area" [errorStateMatcher]="matcher">
-                            <button mat-button *ngIf="areaControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="areaControl.setValue('')">
+                            <button type="button" mat-button *ngIf="areaControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="areaControl.setValue('')">
                                 <i class="fas fa-times clear-button"></i>
                             </button>
                             <mat-autocomplete #area="matAutocomplete" autoActiveFirstOption [displayWith]="getAreaNameById">
@@ -25,7 +25,7 @@
                         <mat-form-field [formGroup]="savePostFormGroup">
                             <mat-label><span matPrefix><i class="fas fa-building">&nbsp;&nbsp;</i></span>Total Rooms</mat-label>
                             <input matInput type="text" aria-label="Total Rooms" matInput [formControl]="homeTypeControl" [matAutocomplete]="homeType" [errorStateMatcher]="matcher">
-                            <button mat-button *ngIf="homeTypeControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="homeTypeControl.setValue('')">
+                            <button type="button" mat-button *ngIf="homeTypeControl.value" matSuffix mat-icon-button aria-label="Clear" (click)="homeTypeControl.setValue('')">
                                 <i class="fas fa-times clear-button"></i>
                             </button>
                             <mat-autocomplete #homeType="matAutocomplete" autoActiveFirstOption [displayWith]="getHomeTypeNameById">
@@ -105,7 +105,8 @@
                     <div fxFlex="50" fxFlex.lt-md="fxFill">
                         <mat-form-field [formGroup]="savePostFormGroup">
                             <mat-label><span matPrefix><i class="fas fa-phone">&nbsp;&nbsp;</i></span>Contact Number</mat-label>
-                            <input matInput type="text" id="contactPhone" formControlName="contactPhone" [errorStateMatcher]="matcher">
+                            <span matPrefix>+91 &nbsp;</span>
+                            <input matInput type="tel" pattern="[1-9]{1}[0-9]{9}" minlength="10" maxlength="10" id="contactPhone" formControlName="contactPhone" [errorStateMatcher]="matcher">
                             <mat-error *ngIf="isInvalidContactPhone()">{{ContactNumberErrorMessage}}</mat-error>
                         </mat-form-field>
                     </div>
@@ -117,8 +118,16 @@
                     </div>
 
                     <div fxFlex="23" fxFlex.lt-lg="fxFill">
-                        <button type="button" mat-raised-button color="primary" (click)="saveHomePost(savePostFormGroup.value)"><i class="fa fa-home "></i>
-                            <span class="margin-left-5 ">Save Post</span>
+                        <button type="button" mat-raised-button color="primary" (click)="saveHomePost(savePostFormGroup.value)" [disabled]="isSaveInProgress">
+                            <span *ngIf="!isSaveInProgress">
+                                <i class="fa fa-home"></i>
+                                <span class="margin-left-5 ">Save Post</span>
+                            </span>
+
+                            <span *ngIf="isSaveInProgress">
+                                <i class="fa fa-spinner fa-spin"></i>
+                                <span class="margin-left-5 ">Saving...</span>
+                            </span>
                         </button>
                     </div>
                 </div>

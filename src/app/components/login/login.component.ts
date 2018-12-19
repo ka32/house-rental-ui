@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
         if (status.isLoggedIn === true) {
           this.router.navigate([this.constHelper.HomePageUrl]);
         } else {
-          this.snackBarService.showError('Error: ' + status.errorMessage);
+          this.snackBarService.showError(status.errorMessage);
         }
       });
     });
