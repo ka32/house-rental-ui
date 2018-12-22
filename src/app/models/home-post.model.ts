@@ -1,12 +1,15 @@
+import { IArea } from './area.model';
+import { IHomeType } from './home-type.model';
+
 export interface IHomePost {
   homePostId: number;
   homeTypeId: number;
-  furnishTypeId: number;
-  homeTypeDesc: string;
+  homeType: IHomeType;
   rent: number;
   deposit: number;
   sqFt: number;
   areaId: number;
+  area: IArea;
   addressPremiseName: string;
   addressStreet: string;
   contactPhone: string;

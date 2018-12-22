@@ -13,7 +13,7 @@ import { IArea } from './../../../models/area.model';
 import { AreaService } from './../../../services/area.service';
 import { IHomeType } from './../../../models/home-type.model';
 import { HomeTypeService } from './../../../services/home-type.service';
-import { AddPostService } from './../../../services/add-post.service';
+import { ManagePostsService } from '../../../services/manage-posts.service';
 import { ConstHelperService } from './../../../services/const-helper.service';
 import { Title } from '@angular/platform-browser';
 import { startWith, map } from 'rxjs/operators';
@@ -44,22 +44,22 @@ export class AddPostComponent implements OnInit {
   private contactPersonCtrl: FormControl;
   private contactPhoneCtrl: FormControl;
 
-  savePostFormGroup: FormGroup;
-  areas: IArea[];
-  homeTypes: IHomeType[];
-  errorMessage: any;
-  rentInWords: string;
-  depositInWords: string;
-  isSaveButtonClicked = false;
+  public savePostFormGroup: FormGroup;
+  public areas: IArea[];
+  public homeTypes: IHomeType[];
+  public errorMessage: any;
+  public rentInWords: string;
+  public depositInWords: string;
+  public isSaveButtonClicked = false;
 
   public isSaveInProgress = false;
   public filteredAreaOptions: Observable<IArea[]>;
-  filteredHomeTypeOptions: Observable<IHomeType[]>;
+  public filteredHomeTypeOptions: Observable<IHomeType[]>;
 
-  matcher = new MyErrorStateMatcher();
+  public matcher = new MyErrorStateMatcher();
 
   constructor(
-    private addPostService: AddPostService,
+    private managePostsService: ManagePostsService,
     private areaService: AreaService,
     private homeTypeService: HomeTypeService,
     private router: Router,
@@ -72,43 +72,43 @@ export class AddPostComponent implements OnInit {
     this.titleService.setTitle('Add New Post | ' + this.constHelper.PageTitle);
 //#region Create Form Controls
     this.areaControl = new FormControl(
-      this.addPostService.area,
+      this.managePostsService.area,
       Validators.required
     );
     this.homeTypeControl = new FormControl(
-      this.addPostService.homeType,
+      this.managePostsService.homeType,
       Validators.required
     );
-    this.sqFtCtrl = new FormControl(this.addPostService.sqFt, [
+    this.sqFtCtrl = new FormControl(this.managePostsService.sqFt, [
       Validators.min(25),
       Validators.max(10000)
     ]);
-    this.rentCtrl = new FormControl(this.addPostService.rent, [
+    this.rentCtrl = new FormControl(this.managePostsService.rent, [
       Validators.required,
       Validators.min(0),
       Validators.max(10000000)
     ]);
-    this.depositCtrl = new FormControl(this.addPostService.deposit, [
+    this.depositCtrl = new FormControl(this.managePostsService.deposit, [
       Validators.required,
       Validators.min(0),
       Validators.max(100000000)
     ]);
     this.addressPremiseNameCtrl = new FormControl(
-      this.addPostService.addressPremiseName,
+      this.managePostsService.addressPremiseName,
       [Validators.required, Validators.minLength(3), Validators.maxLength(100)]
     );
 
     this.addressStreetCtrl = new FormControl(
-      this.addPostService.addressStreet,
+      this.managePostsService.addressStreet,
       [Validators.required, Validators.minLength(3), Validators.maxLength(100)]
     );
 
     this.contactPersonCtrl = new FormControl(
-      this.addPostService.contactPerson,
+      this.managePostsService.contactPerson,
       [Validators.required, Validators.minLength(3), Validators.maxLength(100)]
     );
 
-    this.contactPhoneCtrl = new FormControl(this.addPostService.contactPhone, [
+    this.contactPhoneCtrl = new FormControl(this.managePostsService.contactPhone, [
       Validators.required,
       Validators.min(1000000000),
       Validators.max(9999999999)
@@ -131,7 +131,7 @@ export class AddPostComponent implements OnInit {
     this.getHomeTypes();
 
     this.savePostFormGroup.valueChanges.subscribe(() => {
-      this.addPostService.canDeactivate = false;
+      this.managePostsService.canDeactivate = false;
     });
   }
 
@@ -232,7 +232,7 @@ export class AddPostComponent implements OnInit {
     } else {
       this.isSaveInProgress = true;
 
-      this.addPostService.savePost(formValues).subscribe(
+      this.managePostsService.savePost(formValues).subscribe(
         resp => this.onSuccessfulPost(resp),
         error => {
           this.onPostError(error);
@@ -244,7 +244,7 @@ export class AddPostComponent implements OnInit {
   public onSuccessfulPost(resp: any) {
     this.isSaveInProgress = false;
     this.snackBarService.showInfo('Post Saved Succesfully.');
-    this.addPostService.canDeactivate = true;
+    this.managePostsService.canDeactivate = true;
     this.router.navigate([this.constHelper.HomePageUrl]);
   }
 
@@ -266,7 +266,7 @@ export class AddPostComponent implements OnInit {
   }
 
   public showRentInWords(rent: number): void {
-    this.rentInWords = this.addPostService.convertNumberToWords(rent);
+    this.rentInWords = this.managePostsService.convertNumberToWords(rent);
   }
 
   public showRentLabel(state: boolean) {
@@ -276,7 +276,7 @@ export class AddPostComponent implements OnInit {
   }
 
   showDepositInWords(deposit: number): void {
-    this.depositInWords = this.addPostService.convertNumberToWords(deposit);
+    this.depositInWords = this.managePostsService.convertNumberToWords(deposit);
   }
 
   showDepositLabel(state: boolean) {

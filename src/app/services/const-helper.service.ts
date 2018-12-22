@@ -15,6 +15,7 @@ export class ConstHelperService {
   readonly HelpPageUrl = '/help';
   readonly SearchHomePageUrl = '/search-home';
   readonly AddPostPageUrl = '/add-post';
+  readonly ManagePostsPageUrl = '/manage-posts';
 
   // CAUTION!  If you change this value, make sure to change in auth-request.service.ts as it doesn't use this constant.
   readonly JwtStorageKeyName: string = 'ka_xrc';

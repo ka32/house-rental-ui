@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CustomMaterialModule } from './CustomMaterial.module';
@@ -19,14 +20,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { LoginComponent } from './components/login/login.component';
 import { TitleService } from './services/title.service';
-import { AddPostService } from './services/add-post.service';
+import { ManagePostsService } from './services/manage-posts.service';
 import { AddPostComponent } from './components/post-owner/add-post/add-post.component';
+import { ManagePostsComponent } from './components/post-owner/manage-posts/manage-posts.component';
 import { FurnishTypeService } from './services/furnish-type.service';
 import { SnackBarService } from './services/snack-bar.service';
 import { SnackBarErrorComponent } from './components/snack-bar/snack-bar-error/snack-bar-error.component';
 import { SnackBarInfoComponent } from './components/snack-bar/snack-bar-info/snack-bar-info.component';
 import { HttpHeaderService } from './services/http-header.service';
-import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.service';
+import { CanDeactivateManagePostsService } from './services/can-deactivate-add-post.service';
+import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
 
 @NgModule({
   declarations: [
@@ -37,11 +40,14 @@ import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.
     SearchHomeResultsComponent,
     LoginComponent,
     AddPostComponent,
+    ManagePostsComponent,
     SnackBarErrorComponent,
-    SnackBarInfoComponent
+    SnackBarInfoComponent,
+    PostStatusTypePipe
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
+    BrowserAnimationsModule,
     BrowserModule,
     FlexLayoutModule,
     CustomMaterialModule,
@@ -57,10 +63,10 @@ import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.
     FurnishTypeService,
     SearchHomeService,
     TitleService,
-    AddPostService,
+    ManagePostsService,
     SnackBarService,
     HttpHeaderService,
-    CanDeactivateAddPostService
+    CanDeactivateManagePostsService
   ],
   bootstrap: [AppComponent],
   entryComponents: [SnackBarErrorComponent, SnackBarInfoComponent]
