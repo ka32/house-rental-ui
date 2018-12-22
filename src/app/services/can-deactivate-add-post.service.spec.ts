@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CanDeactivateAddPostService } from './can-deactivate-add-post.service';
+import { CanDeactivateManagePostsService } from './can-deactivate-add-post.service';
 
-describe('CanDeactivateAddPostService', () => {
+describe('CanDeactivateManagePostsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: CanDeactivateAddPostService = TestBed.get(CanDeactivateAddPostService);
+    const service: CanDeactivateManagePostsService = TestBed.get(CanDeactivateManagePostsService);
     expect(service).toBeTruthy();
   });
 });
