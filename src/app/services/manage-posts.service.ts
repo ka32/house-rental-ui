@@ -83,6 +83,7 @@ export class ManagePostsService {
       for (let i = 0, j = 1; i < 9; i++, j++) {
         if (i === 0 || i === 2 || i === 4 || i === 7) {
           if (n_array[i] === 1) {
+            // tslint:disable-next-line:radix
             n_array[j] = 10 + parseInt(n_array[j].toString());
             n_array[i] = 0;
           }
@@ -176,14 +177,14 @@ export class ManagePostsService {
       );
   }
 
-  public getPosts(): Observable<any> {
+  public getMyPosts(): Observable<any> {
     const posts = this.http.get(
-      this.constHelper.HomePostAPIUrl,
+      this.constHelper.MyPostsAPIUrl,
       this.httpHeaderService.getHeader()
     )
       .pipe(
         catchError(error => {
-          console.error('An error occured while in getPosts()', error); // DEBUG
+          console.error('An error occured while in getMyPosts()', error); // DEBUG
           if (error.status === 401) {
             this.zone.run(() => {
               this.authService.deleteToken();
@@ -197,5 +198,27 @@ export class ManagePostsService {
     );
 
     return posts;
+  }
+
+  public deletePost(postId: number): Observable<any> {
+    return this.http.delete(
+      this.constHelper.HomePostAPIUrl + '/' + postId,
+      this.httpHeaderService.getHeader()
+    )
+      .pipe(
+        catchError(error => {
+          console.error('An error occured while in deletePost()', error); // DEBUG
+          if (error.status === 401) {
+            this.zone.run(() => {
+              this.authService.deleteToken();
+              this.authService.isTokenExpired();
+              this.router.navigate([this.constHelper.SignInPageUrl]);
+            });
+          }
+
+          return observableThrowError(error);
+        })
+    );
+
   }
 }

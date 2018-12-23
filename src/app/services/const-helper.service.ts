@@ -8,6 +8,8 @@ export class ConstHelperService {
   readonly AreaAPIUrl = this.RentalAPIBaseUrl + 'Area/City/1';
   readonly FurnishTypeAPIUrl = this.RentalAPIBaseUrl + 'FurnishType';
   readonly HomePostAPIUrl = this.RentalAPIBaseUrl + 'HomePost';
+  readonly MyPostsAPIUrl = this.RentalAPIBaseUrl + 'HomePost/GetMyPosts';
+  readonly DeletePostAPIUrl = this.RentalAPIBaseUrl + 'HomePost/Delete';
   readonly FBLoginAPIUrl = this.RentalAPIBaseUrl + 'Auth/facebook/login';
 
   readonly HomePageUrl = '/home';

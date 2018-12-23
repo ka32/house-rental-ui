@@ -1,0 +1,12 @@
+<div mat-dialog-title>Confirmation</div>
+<div mat-dialog-content>
+    <p>{{data.message}}</p>
+</div>
+<div mat-dialog-actions>
+    <div fxLayout="row" class="full-width" fxLayout.lt-md="column" fxLayoutAlign="end center">
+        <div fxFlex="90" fxLayout.lt-md="column" fxLayoutAlign="end center">
+            <button mat-raised-button (click)="onNoClick()">Cancel</button>
+            <button mat-raised-button color="warn" class="margin-left-5" [mat-dialog-close]="yes" cdkFocusInitial>Delete</button>
+        </div>
+    </div>
+</div>

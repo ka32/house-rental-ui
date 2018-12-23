@@ -30,6 +30,7 @@ import { SnackBarInfoComponent } from './components/snack-bar/snack-bar-info/sna
 import { HttpHeaderService } from './services/http-header.service';
 import { CanDeactivateManagePostsService } from './services/can-deactivate-add-post.service';
 import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
+import { ConfirmDialogComponent } from './components/common/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
     ManagePostsComponent,
     SnackBarErrorComponent,
     SnackBarInfoComponent,
+    ConfirmDialogComponent,
     PostStatusTypePipe
   ],
   imports: [
@@ -69,6 +71,6 @@ import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
     CanDeactivateManagePostsService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SnackBarErrorComponent, SnackBarInfoComponent]
+  entryComponents: [SnackBarErrorComponent, SnackBarInfoComponent, ConfirmDialogComponent]
 })
 export class AppModule {}

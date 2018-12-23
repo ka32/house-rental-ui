@@ -48,6 +48,14 @@ body {
     margin-top: 30px;
 }
 
+.margin-bottom-10 {
+    margin-bottom: 10px;
+}
+
+.margin-right-2 {
+    margin-right: 2px;
+}
+
 .text-red {
     color: red;
 }
@@ -59,4 +67,8 @@ body {
 .clear-button {
     font-size: small;
     color: silver;
+}
+
+.full-width {
+    width: 100%;
 }
