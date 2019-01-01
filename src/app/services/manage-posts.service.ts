@@ -179,7 +179,7 @@ export class ManagePostsService {
 
   public getMyPosts(): Observable<any> {
     const posts = this.http.get(
-      this.constHelper.MyPostsAPIUrl,
+      this.constHelper.GetMyPostsAPIUrl,
       this.httpHeaderService.getHeader()
     )
       .pipe(
@@ -198,6 +198,29 @@ export class ManagePostsService {
     );
 
     return posts;
+  }
+
+  public getMyPost(postId: number): Observable<any> {
+    const post = this.http.get(
+      this.constHelper.GetMyPostAPIUrl + '/' + postId,
+      this.httpHeaderService.getHeader()
+    )
+      .pipe(
+        catchError(error => {
+          console.error('An error occured while in getMyPost()', error); // DEBUG
+          if (error.status === 401) {
+            this.zone.run(() => {
+              this.authService.deleteToken();
+              this.authService.isTokenExpired();
+              this.router.navigate([this.constHelper.SignInPageUrl]);
+            });
+          }
+
+          return observableThrowError(error);
+        })
+    );
+
+    return post;
   }
 
   public deletePost(postId: number): Observable<any> {
@@ -219,6 +242,5 @@ export class ManagePostsService {
           return observableThrowError(error);
         })
     );
-
   }
 }

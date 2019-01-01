@@ -13,6 +13,7 @@ import {
 } from '@angular/animations';
 import { MatDialog } from '@angular/material';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-posts',
@@ -41,7 +42,8 @@ export class ManagePostsComponent implements OnInit {
     private managePostsService: ManagePostsService,
     private snackBarService: SnackBarService,
     private zone: NgZone,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public router: Router
   ) {}
 
   public isGetInProgress = false;
@@ -75,6 +77,10 @@ export class ManagePostsComponent implements OnInit {
         self.deletePost(homePostId);
       }
     });
+  }
+
+  public editMyPost(homePostId: number): void {
+    this.router.navigate([this.constHelper.EditPostPageUrl + '/' + homePostId]);
   }
 
   // #region "Private functions"

@@ -1,8 +1,8 @@
-<h4>Add Post</h4>
+<h4>Edit Post: {{postIdFromUrl}}</h4>
 
 <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
     <div fxFlex="70" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
-        <app-post-form [saveMode]="createMode"></app-post-form>
+        <app-post-form [saveMode]="updateMode" [postId]="postIdFromUrl"></app-post-form>
     </div>
 </div>
 <!-- <app-loader *ngIf="showLoader " [loaderMessage]=" 'Attempting to Save Post...' "></app-loader> -->

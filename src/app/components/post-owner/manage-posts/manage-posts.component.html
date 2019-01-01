@@ -24,7 +24,7 @@
         <ng-container matColumnDef="postDateTime">
             <th mat-header-cell *matHeaderCellDef>Posted on</th>
             <td mat-cell *matCellDef="let row"> {{row.postDateTime | date:'dd/MMM/yyyy, hh:mm aa' }}
-                <button mat-mini-fab class="margin-left-20" (click)="editHomePost()" matTooltip="Edit Post" aria-label="Edit Post" matTooltipShowDelay="1000">
+                <button mat-mini-fab class="margin-left-20" (click)="editMyPost(row.homePostId)" matTooltip="Edit Post" aria-label="Edit Post" matTooltipShowDelay="1000">
                     <i class="far fa-edit"></i>
                 </button>
                 <button mat-mini-fab color="warn" class="margin-left-20" (click)="deleteMyPost(row.homePostId)" matTooltip="Delete Post" aria-label="Delete Post" matTooltipShowDelay="1000">

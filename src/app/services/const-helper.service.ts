@@ -8,7 +8,8 @@ export class ConstHelperService {
   readonly AreaAPIUrl = this.RentalAPIBaseUrl + 'Area/City/1';
   readonly FurnishTypeAPIUrl = this.RentalAPIBaseUrl + 'FurnishType';
   readonly HomePostAPIUrl = this.RentalAPIBaseUrl + 'HomePost';
-  readonly MyPostsAPIUrl = this.RentalAPIBaseUrl + 'HomePost/GetMyPosts';
+  readonly GetMyPostsAPIUrl = this.RentalAPIBaseUrl + 'HomePost/GetMyPosts';
+  readonly GetMyPostAPIUrl = this.RentalAPIBaseUrl + 'HomePost/GetMyPost';
   readonly DeletePostAPIUrl = this.RentalAPIBaseUrl + 'HomePost/Delete';
   readonly FBLoginAPIUrl = this.RentalAPIBaseUrl + 'Auth/facebook/login';
 
@@ -18,6 +19,7 @@ export class ConstHelperService {
   readonly SearchHomePageUrl = '/search-home';
   readonly AddPostPageUrl = '/add-post';
   readonly ManagePostsPageUrl = '/manage-posts';
+  readonly EditPostPageUrl = '/edit-post';
 
   // CAUTION!  If you change this value, make sure to change in auth-request.service.ts as it doesn't use this constant.
   readonly JwtStorageKeyName: string = 'ka_xrc';

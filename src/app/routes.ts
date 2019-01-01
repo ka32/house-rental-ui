@@ -8,6 +8,7 @@ import { AnonymousAuthGuardSerivce } from './services/anonymous-auth-guard-seriv
 import { AuthGuardService } from './services/auth-guard.service';
 import { CanDeactivateManagePostsService } from './services/can-deactivate-add-post.service';
 import { ManagePostsComponent } from './components/post-owner/manage-posts/manage-posts.component';
+import { EditPostComponent } from './components/post-owner/edit-post/edit-post.component';
 
 export const appRoutes: Routes = [
   {
@@ -21,6 +22,11 @@ export const appRoutes: Routes = [
   },
   {
     path: 'manage-posts', component: ManagePostsComponent,
+    canActivate: [AuthGuardService],
+    canDeactivate: [CanDeactivateManagePostsService]
+  },
+  {
+    path: 'edit-post/:id', component: EditPostComponent,
     canActivate: [AuthGuardService],
     canDeactivate: [CanDeactivateManagePostsService]
   },

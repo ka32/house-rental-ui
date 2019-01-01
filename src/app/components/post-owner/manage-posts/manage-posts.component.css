@@ -3,13 +3,12 @@ table {
 }
 
 .table-container {
-    height: 400px;
+    height: 500px;
     overflow: auto;
 }
 
 tr.example-detail-row {
     height: 0;
-    background:
 }
 
 tr.example-element-row:not(.example-expanded-row):hover {
@@ -19,6 +18,10 @@ tr.example-element-row:not(.example-expanded-row):hover {
 
 tr.example-element-row:not(.example-expanded-row):active {
     background: #efefef;
+}
+
+th {
+    font-size: medium;
 }
 
 .example-element-row td {

@@ -31,6 +31,8 @@ import { HttpHeaderService } from './services/http-header.service';
 import { CanDeactivateManagePostsService } from './services/can-deactivate-add-post.service';
 import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
 import { ConfirmDialogComponent } from './components/common/confirm-dialog/confirm-dialog.component';
+import { PostFormComponent } from './components/post-owner/post-form/post-form.component';
+import { EditPostComponent } from './components/post-owner/edit-post/edit-post.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { ConfirmDialogComponent } from './components/common/confirm-dialog/confi
     SearchHomeResultsComponent,
     LoginComponent,
     AddPostComponent,
+    PostFormComponent,
     ManagePostsComponent,
+    EditPostComponent,
     SnackBarErrorComponent,
     SnackBarInfoComponent,
     ConfirmDialogComponent,
