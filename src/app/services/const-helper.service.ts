@@ -23,6 +23,7 @@ export class ConstHelperService {
 
   // CAUTION!  If you change this value, make sure to change in auth-request.service.ts as it doesn't use this constant.
   readonly JwtStorageKeyName: string = 'ka_xrc';
+  readonly LoginUserFirstNameKeyName: string = 'ka_l_fn';
 
   readonly PageTitle = 'KA32.in - Homes for Rent in Kalaburagi';
 
