@@ -3,7 +3,7 @@
 ##### Technology Stack:
   - [Angular 7](https://.angular.io/)
   - [Angular Material](http://angular.material.io)
-  - [ASP.NET Core 2.1](https://www.asp.net/)
+  - [ASP.NET Core 2.2](https://www.asp.net/)
 ##### Tools
   - Angular-Cli
   - VS Code
