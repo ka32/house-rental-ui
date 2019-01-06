@@ -19,6 +19,10 @@ export class AppComponent {
     return this.authService.isUserLoggedIn;
   }
 
+  get loggedInUserName(): string {
+    return this.authService.loggedInUserName;
+  }
+
   logout() {
     this.authService.logout();
     this.router.navigate([this.constHelper.HomePageUrl]);
