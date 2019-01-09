@@ -105,6 +105,7 @@ export class SearchHomeComponent implements OnInit {
 
     let areaId: number;
     let homeTypeId: number;
+
     areaId = this.areaControl.value.areaId;
     homeTypeId = this.homeTypeControl.value.homeTypeId;
 // To do: Prod - remove this mock
