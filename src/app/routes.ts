@@ -6,7 +6,9 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { AnonymousAuthGuardSerivce } from './services/anonymous-auth-guard-serivce';
 import { AuthGuardService } from './services/auth-guard.service';
-import { CanDeactivateAddPostService } from './services/can-deactivate-add-post.service';
+import { CanDeactivateManagePostsService } from './services/can-deactivate-add-post.service';
+import { ManagePostsComponent } from './components/post-owner/manage-posts/manage-posts.component';
+import { EditPostComponent } from './components/post-owner/edit-post/edit-post.component';
 
 export const appRoutes: Routes = [
   {
@@ -16,7 +18,17 @@ export const appRoutes: Routes = [
   {
     path: 'add-post', component: AddPostComponent,
     canActivate: [AuthGuardService],
-    canDeactivate: [CanDeactivateAddPostService]
+    canDeactivate: [CanDeactivateManagePostsService]
+  },
+  {
+    path: 'manage-posts', component: ManagePostsComponent,
+    canActivate: [AuthGuardService],
+    canDeactivate: [CanDeactivateManagePostsService]
+  },
+  {
+    path: 'edit-post/:id', component: EditPostComponent,
+    canActivate: [AuthGuardService],
+    canDeactivate: [CanDeactivateManagePostsService]
   },
   { path: 'search-home', component: SearchHomeComponent },
   { path: 'search-home/:id', component: SearchHomeComponent },

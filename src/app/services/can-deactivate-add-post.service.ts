@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { AddPostComponent } from '../components/post-owner/add-post/add-post.component';
 import { CanDeactivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { AddPostService } from './add-post.service';
+import { ManagePostsService } from './manage-posts.service';
 import { MatDialog } from '@angular/material';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CanDeactivateAddPostService
+export class CanDeactivateManagePostsService
   implements CanDeactivate<AddPostComponent> {
-  constructor(private addPostService: AddPostService) {}
+  constructor(private ManagePostsService: ManagePostsService) {}
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.addPostService.canDeactivate) {
+    if (this.ManagePostsService.canDeactivate) {
       return true;
     }
 
@@ -22,9 +22,9 @@ export class CanDeactivateAddPostService
     );
 
     if (result === false) {
-      this.addPostService.canDeactivate = true;
+      this.ManagePostsService.canDeactivate = true;
     }
 
-    return this.addPostService.canDeactivate;
+    return this.ManagePostsService.canDeactivate;
   }
 }
