@@ -150,7 +150,7 @@ export class PostFormComponent implements OnInit {
 
   //#region getter properties
   get savePostLabel(): string {
-    return this.saveMode === 'update' ? 'Update Post' : 'Save Post';
+    return this.saveMode === 'update' ? 'Update Post' : 'Add Post';
   }
 
   get savingLabel(): string {
@@ -246,22 +246,84 @@ export class PostFormComponent implements OnInit {
 
   private loadPost(homePostId: number): void {
     this.managePostsService.getMyPost(homePostId).subscribe(
-      (post: IHomePost) => {
-        this.zone.run(() => {
-          this.areaControl.setValue(post.area);
-          this.homeTypeControl.setValue(post.homeType);
-          this.rentCtrl.setValue(post.rent);
-          this.depositCtrl.setValue(post.deposit);
-          this.sqFtCtrl.setValue(post.sqFt);
-          this.addressPremiseNameCtrl.setValue(post.addressPremiseName);
-          this.addressStreet.setValue(post.addressStreet);
-          this.contactPersonCtrl.setValue(post.contactPerson);
-          this.contactPhoneCtrl.setValue(post.contactPhone);
-        });
-    }, error => {
-        
+      (post: IHomePost) => this.onSuccessfulLoad(post),
+      error => this.onFailedLoad(error)
+      );
+  }
+
+  private onSuccessfulLoad(post: IHomePost) {
+    this.zone.run(() => {
+      this.areaControl.setValue(post.area);
+      this.homeTypeControl.setValue(post.homeType);
+      this.rentCtrl.setValue(post.rent);
+      this.depositCtrl.setValue(post.deposit);
+      this.sqFtCtrl.setValue(post.sqFt);
+      this.addressPremiseNameCtrl.setValue(post.addressPremiseName);
+      this.addressStreet.setValue(post.addressStreet);
+      this.contactPersonCtrl.setValue(post.contactPerson);
+      this.contactPhoneCtrl.setValue(post.contactPhone);
+
     });
   }
+
+  private onFailedLoad(error: any): void {
+    let errorMsg = 'Failed to load Post. ';
+
+    if (error.status === 0) {
+      errorMsg += 'KA32 Servers are temporarily down.';
+      this.router.navigate([this.constHelper.HomePageUrl]);
+    } else if (error.status === 404) {
+      errorMsg += 'Invalid Post';
+      this.router.navigate([this.constHelper.ManagePostsPageUrl]);
+    } else if (error.status === 401) {
+      errorMsg += 'Invalid Session';
+      this.router.navigate([this.constHelper.HomePageUrl]);
+    } else {
+      this.router.navigate([this.constHelper.HomePageUrl]);
+    }
+
+    this.snackBarService.showError(errorMsg);
+  }
+
+  private createNewPost(formValues: any): void {
+    this.managePostsService.createPost(formValues).subscribe(
+      resp => this.onSuccessfulSave(resp, 'Your post has been created successfully'),
+      error => this.onFailedSave(error)
+    );
+  }
+
+  private onSuccessfulSave(response: any, msg: string) {
+    this.isSaveInProgress = false;
+    this.snackBarService.showInfo(msg);
+    this.managePostsService.canDeactivate = true;
+    this.navigateToPreviousPage();
+  }
+
+  private onFailedSave(error: any): void {
+    this.isSaveInProgress = false;
+    let errorMsg = (this.saveMode === 'update') ? 'Failed to Update Post. ' : 'Failed to Create Post. ';
+
+    if (error.status === 0) {
+      errorMsg += 'KA32 Servers are temporarily down.';
+    } else if (error.error === 'You reached maximum posts limit') {
+      errorMsg += 'As you reaced maximum posts limit';
+    } else {
+      console.log('Error: ' + error.error);
+    }
+
+    this.snackBarService.showError(errorMsg);
+  }
+
+  private updatePost(formValues: IHomePost): void {
+    const homePost = JSON.parse(JSON.stringify(formValues));
+    homePost.homePostId = +this.postId;
+
+    this.managePostsService.updatePost(homePost).subscribe(
+      resp => this.onSuccessfulSave(resp, 'Post updated succesfully'),
+      error => this.onFailedSave(error)
+    );
+  }
+
   //#endregion
 
   //#region Public methods
@@ -273,7 +335,7 @@ export class PostFormComponent implements OnInit {
     return homeType ? homeType.name : '';
   }
 
-  public saveHomePost(formValues): void {
+  public postFormSubmit(formValues): void {
     this.isSaveButtonClicked = true;
 
     if (!this.savePostFormGroup.valid) {
@@ -281,34 +343,20 @@ export class PostFormComponent implements OnInit {
     } else {
       this.isSaveInProgress = true;
 
-      this.managePostsService.savePost(formValues).subscribe(
-        resp => this.onSuccessfulPost(resp),
-        error => {
-          this.onPostError(error);
-        }
-      );
+      if (this.saveMode === 'create') {
+        this.createNewPost(formValues);
+      } else if (this.saveMode === 'update') {
+        this.updatePost(formValues);
+      } else {
+        this.snackBarService.showError('Something went wrong. Please Retry.');
+        console.log('Error: Invalid saveMode status: ' + this.saveMode);
+        console.log('Please report us this issue via email to: contact@ka32.in');
+        this.router.navigate([this.constHelper.HomePageUrl]);
+      }
+
     }
   }
 
-  public onSuccessfulPost(resp: any) {
-    this.isSaveInProgress = false;
-    this.snackBarService.showInfo('Post Saved Succesfully.');
-    this.managePostsService.canDeactivate = true;
-    this.navigateToPreviousPage();
-  }
-
-  public onPostError(error: any): void {
-    this.isSaveInProgress = false;
-    let errorMsg = 'Failed to Save Post. ';
-
-    if (error.status === 0) {
-      errorMsg += 'KA32 Servers are temporarily down.';
-    } else if (error.error === 'You reached maximum posts limit') {
-      errorMsg += error.error;
-    }
-
-    this.snackBarService.showError(errorMsg);
-  }
 
   public cancelPost(): void {
     this.navigateToPreviousPage();

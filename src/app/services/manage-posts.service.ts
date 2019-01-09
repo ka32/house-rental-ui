@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable } from 'rxjs';
+import { throwError as observableThrowError, Observable, ObservableInput } from 'rxjs';
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConstHelperService } from './const-helper.service';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { HttpHeaderService } from './http-header.service';
 import { GridAreaDirective } from '@angular/flex-layout/grid/typings/area/area';
+import { IHomePost } from '../models/home-post.model';
 @Injectable()
 export class ManagePostsService {
   area: number;
@@ -138,22 +139,14 @@ export class ManagePostsService {
   }
 //#endregion
 
-  public savePost(homePost): Observable<any> {
+//#region "Public functions"
+  public createPost(homePost): Observable<any> {
     console.log(homePost);
 
     const homePostBody = JSON.parse(JSON.stringify(homePost));
 
-    if (homePost.areaId.areaId !== undefined) {
-      homePostBody.areaId = homePost.areaId.areaId;
-    } else {
-      homePostBody.areaId = homePost.areaId;
-    }
-
-    if (homePostBody.homeTypeId.homeTypeId !== undefined) {
-      homePostBody.homeTypeId = homePost.homeTypeId.homeTypeId;
-    } else {
-      homePostBody.homeTypeId = homePost.homeTypeId;
-    }
+    homePostBody.areaId = this.getAreaId(homePost);
+    homePostBody.homeTypeId = this.getHomeTypeId(homePost);
 
     return this.http
       .post<Response>(
@@ -162,18 +155,26 @@ export class ManagePostsService {
         this.httpHeaderService.getHeader()
       )
       .pipe(
-        catchError(error => {
-          console.error('An error occurred in savePost()', error); // DEBUG
-          if (error.status === 401) {
-            this.zone.run(() => {
-              this.authService.deleteToken();
-              this.authService.isTokenExpired();
-              this.router.navigate([this.constHelper.SignInPageUrl]);
-            });
-          }
+        catchError(error => this.onFailedSave(error))
+      );
+  }
 
-          return observableThrowError(error);
-        })
+  public updatePost(homePost: IHomePost): Observable<any> {
+    console.log(homePost);
+
+    const homePostBody = JSON.parse(JSON.stringify(homePost));
+
+    homePostBody.areaId = this.getAreaId(homePost);
+    homePostBody.homeTypeId = this.getHomeTypeId(homePost);
+
+    return this.http
+      .put<Response>(
+        this.constHelper.HomePostAPIUrl,
+        homePostBody,
+        this.httpHeaderService.getHeader()
+      )
+      .pipe(
+        catchError(error => this.onFailedSave(error))
       );
   }
 
@@ -243,4 +244,38 @@ export class ManagePostsService {
         })
     );
   }
+//#endregion
+
+//#region Private functions
+  private getAreaId(homePost: any): number {
+    if (homePost.areaId.areaId !== undefined) {
+      return homePost.areaId.areaId;
+    } else {
+      return homePost.areaId;
+    }
+  }
+
+  private getHomeTypeId(homePost: any): number {
+    if (homePost.homeTypeId.homeTypeId !== undefined) {
+      return homePost.homeTypeId.homeTypeId;
+    } else {
+      return homePost.homeTypeId;
+    }
+  }
+
+  private onFailedSave(error: any): ObservableInput<any> {
+    {
+      console.error('An error occurred in createPost or updatePost()', error); // DEBUG
+      if (error.status === 401) {
+        this.zone.run(() => {
+          this.authService.deleteToken();
+          this.authService.isTokenExpired();
+          this.router.navigate([this.constHelper.SignInPageUrl]);
+        });
+      }
+
+      return observableThrowError(error);
+    }
+  }
+//#endregion
 }

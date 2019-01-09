@@ -1,4 +1,4 @@
-<form [formGroup]="savePostFormGroup" novalidate autocomplete="off" (ngSubmit)="saveHomePost(savePostFormGroup.value)">
+<form [formGroup]="savePostFormGroup" novalidate autocomplete="off">
     <mat-card>
         <div fxLayout="row wrap" fxLayoutAlign="center center">
             <!-- Locality -->
@@ -116,7 +116,7 @@
             </div>
 
             <div fxFlex="23" fxFlex.lt-lg="fxFill">
-                <button type="button" mat-raised-button color="primary" (click)="saveHomePost(savePostFormGroup.value)" [disabled]="isSaveInProgress">
+                <button type="button" #saveButton mat-raised-button color="primary" (click)="postFormSubmit(savePostFormGroup.value)" [disabled]="isSaveInProgress || (!savePostFormGroup.dirty)">
                     <span *ngIf="!isSaveInProgress">
                         <i class="fa fa-home"></i>
                         <span class="margin-left-5 ">{{savePostLabel}}</span>
