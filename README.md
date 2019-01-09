@@ -1,7 +1,7 @@
 # KA32 Web ClientDev
 
 ##### Technology Stack:
-  - [Angular 6](https://.angular.io/)
+  - [Angular 7](https://.angular.io/)
   - [Angular Material](http://angular.material.io)
   - [ASP.NET Core 2.1](https://www.asp.net/)
 ##### Tools
@@ -35,7 +35,7 @@
 - Chrome, Firefox Developer Edition
 - Git Bash
 - Node 8.11 or higher
-- Angular cli v6 or higher, Angular v 6.0.7
+- Angular cli v7 or higher, Angular v 7
      ```sh
      $ npm install -g @angular/cli
      ```
@@ -92,3 +92,10 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## UI Coloring tips
+    background-image: linear-gradient(rgb(134, 95, 197) 0%, rgb(48, 44, 108) 100%);
+	
+## Enable SSL in localhost
+	Install browser-sync to get certificates from it
+	In Chrome, go to chrome://flags   > Enable "Allow invalid certificates for resources loaded from localhost"

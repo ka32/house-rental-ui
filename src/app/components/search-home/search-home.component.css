@@ -1,15 +1,7 @@
 .full-width {
-  width: 100%;
-}
-/*
-.container {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+    width: 100%;
 }
 
-.card {
-  display: block;
-  height: 100px;
-  width: 100px;
-} */
+mat-card {
+    max-height: 250px;
+}

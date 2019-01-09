@@ -1,0 +1,18 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="margin-top-30">
+    <mat-card fxFlex="40" fxLayout.lt-md="column" fxLayoutAlign="space-around center">
+        <div fxLayout="column" fxLayoutAlign="center center">
+            <div fxFlex="80">
+                <span *ngIf="!showLoader || isLoginReset">Sign In</span>
+            </div>
+
+            <div fxFlex="80" *ngIf="!showLoader || isLoginReset" class="margin-top-30">
+                <button mat-stroked-button color="primary" (click)="login()">
+                    <i class="fab fa-facebook-square fa-2x"></i>&nbsp;
+                    Continue with Facebook
+                </button>
+            </div>
+
+            <div *ngIf="showLoader"><i class="fas fa-spinner fa-spin fa-2x"></i><span class="margin-left-20">Signing you in...</span></div>
+        </div>
+    </mat-card>
+</div>
