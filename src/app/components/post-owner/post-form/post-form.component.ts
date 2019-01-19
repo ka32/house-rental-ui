@@ -7,7 +7,7 @@ import {
   NgForm
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
 
 import { IArea } from './../../../models/area.model';
 import { AreaService } from './../../../services/area.service';
@@ -36,8 +36,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./post-form.component.css']
 })
 export class PostFormComponent implements OnInit {
-  private areaControl: FormControl;
-  private homeTypeControl: FormControl;
   private sqFtCtrl: FormControl;
   private rentCtrl: FormControl;
   private depositCtrl: FormControl;
@@ -46,6 +44,9 @@ export class PostFormComponent implements OnInit {
   private contactPersonCtrl: FormControl;
   private contactPhoneCtrl: FormControl;
 
+  public areaControl: FormControl;
+  public homeTypeControl: FormControl;
+  
   public savePostFormGroup: FormGroup;
   public areas: IArea[];
   public homeTypes: IHomeType[];

@@ -1,55 +1,83 @@
 <div fxLayout="column">
-    <div>
-        <div fxLayout fxLayout.lt-md="column" fxLayoutAlign="center" fxLayoutGap.xs="0">
-            <div fxFlex="100%">
-                <mat-toolbar color="primary" class="toolbar-shadow toolbar">
-                    <span>
-                      <a [routerLink]=[constHelper.HomePageUrl] mat-button>Home</a>
-                    </span>
-                    <span>
-                      <a [routerLink]=[constHelper.SearchHomePageUrl] mat-button>Search</a>
-                    </span>
-                    <span>
-                      <a class="item" *ngIf="isUserLoggedIn" [routerLink]=[constHelper.AddPostPageUrl] routerLinkActive="active" mat-button>Add Post</a>
-                    </span>
-                    <span>
-                      <a class="item" *ngIf="isUserLoggedIn" [routerLink]=[constHelper.ManagePostsPageUrl] routerLinkActive="active" mat-button>Manage Posts</a>
-                    </span>
+  <div>
+    <div
+      fxLayout
+      fxLayout.lt-md="column"
+      fxLayoutAlign="center"
+      fxLayoutGap.xs="0"
+    >
+      <div fxFlex="100%">
+        <mat-toolbar color="primary" class="toolbar-shadow toolbar">
+          <span>
+            <a [routerLink]="[constHelper.HomePageUrl]" mat-button>Home</a>
+          </span>
+          <span>
+            <a [routerLink]="[constHelper.SearchHomePageUrl]" mat-button
+              >Search</a
+            >
+          </span>
+          <span>
+            <a
+              class="item"
+              *ngIf="isUserLoggedIn"
+              [routerLink]="[constHelper.AddPostPageUrl]"
+              routerLinkActive="active"
+              mat-button
+              >Add Post</a
+            >
+          </span>
+          <span>
+            <a
+              class="item"
+              *ngIf="isUserLoggedIn"
+              [routerLink]="[constHelper.ManagePostsPageUrl]"
+              routerLinkActive="active"
+              mat-button
+              >Manage Posts</a
+            >
+          </span>
 
-                    <!-- This fills the remaining space of the current row -->
-                    <span class="toolbar-fill-remaining-space"></span>
-                    <span *ngIf="!isUserLoggedIn">
-                        Want to post your House for Rent ?
-                      <a mat-button [routerLink]=[constHelper.SignInPageUrl] routerLinkActive="active">
-                          <i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i><span class="margin-left-10">Sign In</span>
-                    </a>
-                    </span>
-                    <span *ngIf="isUserLoggedIn">
-                        <a mat-button [matMenuTriggerFor]="menu">
-                            <i class="fas fa-user" aria-hidden="true"> </i><span class="margin-left-5">{{loggedInUserName}}</span>
-                    <i class="fas fa-caret-down margin-left-5"></i>
-                    </a>
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item [routerLink]=[constHelper.ManagePostsPageUrl]>
-                                        Manage Posts
-                                    </button>
-                        <button mat-menu-item (click)="logout()" *ngIf="isUserLoggedIn">
-                                        Sign Out
-                                    </button>
-                    </mat-menu>
-                    </span>
-                </mat-toolbar>
-            </div>
-        </div>
+          <!-- This fills the remaining space of the current row -->
+          <span class="toolbar-fill-remaining-space"></span>
+          <span *ngIf="!isUserLoggedIn">
+            Want to post your House for Rent ?
+            <a
+              mat-button
+              [routerLink]="[constHelper.SignInPageUrl]"
+              routerLinkActive="active"
+            >
+              <i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i
+              ><span class="margin-left-10">Sign In</span>
+            </a>
+          </span>
+          <span *ngIf="isUserLoggedIn">
+            <a mat-button [matMenuTriggerFor]="menu">
+              <i class="fas fa-user" aria-hidden="true"> </i
+              ><span class="margin-left-5">{{ loggedInUserName }}</span>
+              <i class="fas fa-caret-down margin-left-5"></i>
+            </a>
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                [routerLink]="[constHelper.ManagePostsPageUrl]"
+              >
+                <i class="fas fa-caret-down margin-left-5"></i> Manage Posts
+              </button>
+              <button mat-menu-item (click)="logout()" *ngIf="isUserLoggedIn">
+                Sign Out
+              </button>
+            </mat-menu>
+          </span>
+        </mat-toolbar>
+      </div>
     </div>
+  </div>
 
-    <div>
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-            <div fxFlex="15" fxHide.xs></div>
-            <div fxFlex="70" fxFlex.xs="100">
-                <router-outlet></router-outlet>
-            </div>
-            <div fxFlex="15" fxHide.xs></div>
-        </div>
+  <div>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <div fxFlex="15" fxHide.xs></div>
+      <div fxFlex="70" fxFlex.xs="100"><router-outlet></router-outlet></div>
+      <div fxFlex="15" fxHide.xs></div>
     </div>
+  </div>
 </div>

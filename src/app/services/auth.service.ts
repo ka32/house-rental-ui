@@ -1,8 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConstHelperService } from './const-helper.service';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { tap, catchError } from 'rxjs/operators';
 import { IFbAuthResponse } from './../models/fb-auth-response.model';

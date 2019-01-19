@@ -1,4 +1,3 @@
-import { throwError, Observable } from 'rxjs';
 import { catchError, retry, retryWhen } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -7,6 +6,8 @@ import { IArea } from './../models/area.model';
 import { IHomeType } from './../models/home-type.model';
 import { IHomePost } from './../models/home-post.model';
 import { ConstHelperService } from './../services/const-helper.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Injectable()
 export class SearchHomeService {

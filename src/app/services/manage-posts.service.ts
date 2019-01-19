@@ -1,4 +1,4 @@
-import { throwError as observableThrowError, Observable, ObservableInput } from 'rxjs';
+import { throwError as observableThrowError } from 'rxjs/internal/observable/throwError';
 import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ConstHelperService } from './const-helper.service';
@@ -8,6 +8,8 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { HttpHeaderService } from './http-header.service';
 import { GridAreaDirective } from '@angular/flex-layout/grid/typings/area/area';
 import { IHomePost } from '../models/home-post.model';
+import { Observable } from 'rxjs/internal/Observable';
+import { ObservableInput } from 'rxjs/internal/types';
 @Injectable()
 export class ManagePostsService {
   area: number;
