@@ -1,5 +1,5 @@
-
-import {throwError as observableThrowError,  Observable } from 'rxjs';
+import { throwError as observableThrowError } from 'rxjs/internal/observable/throwError';
+import { Observable } from 'rxjs/internal/Observable';
 import { Injectable } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';

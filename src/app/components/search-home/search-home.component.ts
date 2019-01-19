@@ -5,7 +5,7 @@ import { IArea } from './../../models/area.model';
 import { AreaService } from '../../services/area.service';
 import { IHomeType } from '../../models/home-type.model';
 import { HomeTypeService } from './../../services/home-type.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
 import { Title } from '@angular/platform-browser';
 import { ConstHelperService } from '../../services/const-helper.service';
 import { IHomePost } from '../../models/home-post.model';
@@ -18,8 +18,8 @@ import { startWith, map } from '../../../../node_modules/rxjs/operators';
   styleUrls: ['./search-home.component.css']
 })
 export class SearchHomeComponent implements OnInit {
-  private areaControl: FormControl;
-  private homeTypeControl: FormControl;
+  public areaControl: FormControl;
+  public homeTypeControl: FormControl;
 
   public searchFormGroup: FormGroup;
   public areas: IArea[];

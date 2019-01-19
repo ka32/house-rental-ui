@@ -1,10 +1,11 @@
-import { throwError, Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { IHomeType } from './../models/home-type.model';
 import { ConstHelperService } from './../services/const-helper.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 /*
 export const HomeTypes: IHomeType[] = [

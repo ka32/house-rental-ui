@@ -1,8 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConstHelperService } from './const-helper.service';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { tap, catchError } from 'rxjs/operators';
 import { IFbAuthResponse } from './../models/fb-auth-response.model';
@@ -20,6 +21,7 @@ export class AuthService {
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   public loginEvent: Subject<ILoginResponse> = new Subject<ILoginResponse>();
   private isLoggedIn: boolean;
+  private _loginUserName: string;
 
   constructor(private http: HttpClient, private router: Router, private constHelper: ConstHelperService,
     private zone: NgZone) {
@@ -39,6 +41,18 @@ export class AuthService {
   get isUserLoggedIn(): boolean {
     this.isLoggedIn = !this.isTokenExpired();
     return this.isLoggedIn;
+  }
+
+  get loggedInUserName(): string {
+    if (this.isLoggedIn) {
+      if (this._loginUserName === '' || this._loginUserName === undefined) {
+        return this.getUserNameFromStorage();
+      }
+
+      return this._loginUserName;
+    }
+
+    return '';
   }
 
   fbLoginEvent(responseLogin): void {
@@ -66,7 +80,9 @@ export class AuthService {
 
   // Login to FB
   private fbLogin() {
-    FB.login(this.fbLoginResponseHandler.bind(this), { scope: 'public_profile,email' });
+    FB.login(this.fbLoginResponseHandler.bind(this), {
+      scope: 'public_profile, email'
+    });
   }
 
   private fbLoginResponseHandler(response: any) {
@@ -74,6 +90,14 @@ export class AuthService {
       this.handleError('Facebook Sign In Failed');
       return;
     }
+
+    const self = this;
+    FB.api('/me?fields=name,first_name,last_name', function (response: any) {
+      self.zone.run(() => {
+        self._loginUserName = response.first_name;
+      });
+    });
+
 
     this.ka32Login(response.authResponse.accessToken).subscribe(
       resp => {},
@@ -103,6 +127,7 @@ export class AuthService {
 
           this.zone.run(() => {
             this.isLoggedIn = true;
+            this.setUserNameInStorage(this._loginUserName);
           });
 
           this.postLogin(loginResponse);
@@ -115,6 +140,7 @@ export class AuthService {
 
   private postLogin(loginResponse: ILoginResponse) {
     this.setToken(loginResponse.ka32JWT.token);
+    this.setUserNameInStorage(this._loginUserName);
     this.loginEvent.next(loginResponse);
   }
 
@@ -142,8 +168,10 @@ export class AuthService {
   }
 
   logout() {
+    this._loginUserName = undefined;
     this.isLoggedIn = false;
     this.deleteToken();
+    this.deleteUserNameFromStorage();
     FB.logout();
   }
 
@@ -157,6 +185,18 @@ export class AuthService {
 
   public deleteToken(): void {
     localStorage.removeItem(this.constHelper.JwtStorageKeyName);
+  }
+
+  private getUserNameFromStorage(): string {
+    return localStorage.getItem(this.constHelper.LoginUserFirstNameKeyName);
+  }
+
+  private setUserNameInStorage(userName: string): void {
+    localStorage.setItem(this.constHelper.LoginUserFirstNameKeyName, userName);
+  }
+
+  private deleteUserNameFromStorage(): void {
+    localStorage.removeItem(this.constHelper.LoginUserFirstNameKeyName);
   }
 
   private getTokenExpirationDate(token: string): Date {

@@ -24,13 +24,15 @@ export const Areas: IArea[] = [
   {areaId: 57, name: 'Shanthi Nagar'}, {areaId: 58, name: 'Shivaji Nagar'}, {areaId: 59, name: 'Tilak Nagar'}
 ];
 */
-import { throwError, Observable } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+
 import { catchError, retry } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import { IArea } from './../models/area.model';
 import { ConstHelperService } from './../services/const-helper.service';
+import { throwError } from 'rxjs/internal/observable/throwError';
 
 /*
 export const HomeTypes: IHomeType[] = [
