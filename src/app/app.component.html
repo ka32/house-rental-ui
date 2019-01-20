@@ -61,10 +61,10 @@
                 mat-menu-item
                 [routerLink]="[constHelper.ManagePostsPageUrl]"
               >
-                <i class="fas fa-caret-down margin-left-5"></i> Manage Posts
+                <i class="fas fa-list-alt margin-left-5 "></i> Manage Posts
               </button>
               <button mat-menu-item (click)="logout()" *ngIf="isUserLoggedIn">
-                Sign Out
+                <i class="fas fa-sign-out-alt margin-left-5 "></i> Sign Out
               </button>
             </mat-menu>
           </span>

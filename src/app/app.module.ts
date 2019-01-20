@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CustomMaterialModule } from './CustomMaterial.module';
@@ -33,6 +33,7 @@ import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
 import { ConfirmDialogComponent } from './components/common/confirm-dialog/confirm-dialog.component';
 import { PostFormComponent } from './components/post-owner/post-form/post-form.component';
 import { EditPostComponent } from './components/post-owner/edit-post/edit-post.component';
+import { VerifyMobileNumberComponent } from './components/post-owner/verify-mobile-number/verify-mobile-number.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { EditPostComponent } from './components/post-owner/edit-post/edit-post.c
     SnackBarErrorComponent,
     SnackBarInfoComponent,
     ConfirmDialogComponent,
-    PostStatusTypePipe
+    PostStatusTypePipe,
+    VerifyMobileNumberComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -75,6 +77,10 @@ import { EditPostComponent } from './components/post-owner/edit-post/edit-post.c
     CanDeactivateManagePostsService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SnackBarErrorComponent, SnackBarInfoComponent, ConfirmDialogComponent]
+  entryComponents: [
+    SnackBarErrorComponent,
+    SnackBarInfoComponent,
+    ConfirmDialogComponent
+  ]
 })
 export class AppModule {}
