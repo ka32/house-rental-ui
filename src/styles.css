@@ -1,19 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 body {
-    margin: 0;
+  margin: 0;
 }
 
 html,
 body {
-    height: 100%;
-    width: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .text-center {
@@ -21,62 +22,66 @@ body {
 }
 
 .text-right {
-    text-align: right;
+  text-align: right;
 }
 
 .mat-card-header-text {
-    width: 100%;
+  width: 100%;
 }
 
 .text-muted {
-    color: gray;
+  color: gray;
 }
 
 .text-small {
-    font-size: small;
+  font-size: small;
 }
 
 .toolbar {
-    height: 50px!important;
+  height: 50px !important;
 }
 
 .margin-left-5 {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .margin-left-10 {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .margin-left-20 {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .margin-top-30 {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 .margin-bottom-10 {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .margin-right-2 {
-    margin-right: 2px;
+  margin-right: 2px;
 }
 
 .text-red {
-    color: red;
+  color: red;
 }
 
 .text-lime-green {
-    color: limegreen;
+  color: limegreen;
 }
 
 .clear-button {
-    font-size: small;
-    color: silver;
+  font-size: small;
+  color: silver;
 }
 
 .full-width {
-    width: 100%;
+  width: 100%;
+}
+
+.mat-toolbar.mat-primary {
+  background: rgb(3, 155, 229);
 }

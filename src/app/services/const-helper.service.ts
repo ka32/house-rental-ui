@@ -11,7 +11,9 @@ export class ConstHelperService {
   readonly GetMyPostsAPIUrl = this.RentalAPIBaseUrl + 'HomePost/GetMyPosts';
   readonly GetMyPostAPIUrl = this.RentalAPIBaseUrl + 'HomePost/GetMyPost';
   readonly DeletePostAPIUrl = this.RentalAPIBaseUrl + 'HomePost/Delete';
-  readonly FBLoginAPIUrl = this.RentalAPIBaseUrl + 'Auth/facebook/login';
+  readonly FBLoginAPIUrl = this.RentalAPIBaseUrl + 'Auth/Facebook/Login';
+  readonly MobileNumberAPIUrl =
+    this.RentalAPIBaseUrl + 'MobileNumber/GenerateOTP';
 
   readonly HomePageUrl = '/home';
   readonly SignInPageUrl = '/signIn';
@@ -27,6 +29,5 @@ export class ConstHelperService {
 
   readonly PageTitle = 'KA32.in - Homes for Rent in Kalaburagi';
 
-  constructor() { }
-
+  constructor() {}
 }

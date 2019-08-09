@@ -1,6 +1,28 @@
 {
-    "typescript.tsdk": "node_modules\\typescript\\lib",
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "peacock.favoriteColors": [
+    {
+      "name": "Gatsby Purple",
+      "value": "#639"
+    },
+    {
+      "name": "Auth0 Orange",
+      "value": "#eb5424"
+    },
+    {
+      "name": "Azure Blue",
+      "value": "#007fff"
+    },
+    {
+      "peacock.affectActivityBar": true,
+      "peacock.affectStatusBar": true,
+      "peacock.affectTitleBar": true,
+      "peacock.elementAdjustments": {
+        "activityBar": "lighten"
+      }
+    }
+  ]
 }

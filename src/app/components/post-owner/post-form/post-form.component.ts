@@ -19,7 +19,7 @@ import { startWith, map } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { IHomePost } from 'src/app/models/home-post.model';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { VerifyMobileNumberComponent } from '../verify-mobile-number/verify-mobile-number.component';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -398,18 +398,24 @@ export class PostFormComponent implements OnInit {
     }
   }
 
-  public verifyContactNumber(mobileNumber) {
+  public verifyContactNumber() {
+    if (this.savePostFormGroup.controls.contactPhone.invalid) {
+      this.snackBarService.showError('Please enter a valid mobile number');
+      return;
+    }
+
     const dialogRef = this.dialog.open(VerifyMobileNumberComponent, {
       width: '300px',
+      disableClose: true,
       data: {
-        message: mobileNumber
+        message: this.contactPhone.value
       }
     });
 
     const self = this;
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'yes') {
-        self.deletePost(homePostId);
+        // self.deletePost(homePostId);
       }
     });
   }
