@@ -11,7 +11,7 @@ import {
   transition,
   animate
 } from '@angular/animations';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../common/confirm-dialog/confirm-dialog.component';
 import { Router } from '@angular/router';
 

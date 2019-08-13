@@ -19,6 +19,8 @@ import { startWith, map } from 'rxjs/operators';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { IHomePost } from 'src/app/models/home-post.model';
+import { MatDialog } from '@angular/material/dialog';
+import { VerifyMobileNumberComponent } from '../verify-mobile-number/verify-mobile-number.component';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   showError = false;
@@ -46,7 +48,7 @@ export class PostFormComponent implements OnInit {
 
   public areaControl: FormControl;
   public homeTypeControl: FormControl;
-  
+
   public savePostFormGroup: FormGroup;
   public areas: IArea[];
   public homeTypes: IHomeType[];
@@ -67,7 +69,8 @@ export class PostFormComponent implements OnInit {
     private router: Router,
     private constHelper: ConstHelperService,
     private snackBarService: SnackBarService,
-    private zone: NgZone
+    private zone: NgZone,
+    private dialog: MatDialog
   ) {}
 
   @Input()
@@ -246,9 +249,11 @@ export class PostFormComponent implements OnInit {
   }
 
   private loadPost(homePostId: number): void {
-    this.managePostsService.getMyPost(homePostId).subscribe(
-      (post: IHomePost) => this.onSuccessfulLoad(post),
-      error => this.onFailedLoad(error)
+    this.managePostsService
+      .getMyPost(homePostId)
+      .subscribe(
+        (post: IHomePost) => this.onSuccessfulLoad(post),
+        error => this.onFailedLoad(error)
       );
   }
 
@@ -263,7 +268,6 @@ export class PostFormComponent implements OnInit {
       this.addressStreet.setValue(post.addressStreet);
       this.contactPersonCtrl.setValue(post.contactPerson);
       this.contactPhoneCtrl.setValue(post.contactPhone);
-
     });
   }
 
@@ -287,10 +291,16 @@ export class PostFormComponent implements OnInit {
   }
 
   private createNewPost(formValues: any): void {
-    this.managePostsService.createPost(formValues).subscribe(
-      resp => this.onSuccessfulSave(resp, 'Your post has been created successfully'),
-      error => this.onFailedSave(error)
-    );
+    this.managePostsService
+      .createPost(formValues)
+      .subscribe(
+        resp =>
+          this.onSuccessfulSave(
+            resp,
+            'Your post has been created successfully'
+          ),
+        error => this.onFailedSave(error)
+      );
   }
 
   private onSuccessfulSave(response: any, msg: string) {
@@ -302,7 +312,10 @@ export class PostFormComponent implements OnInit {
 
   private onFailedSave(error: any): void {
     this.isSaveInProgress = false;
-    let errorMsg = (this.saveMode === 'update') ? 'Failed to Update Post. ' : 'Failed to Create Post. ';
+    let errorMsg =
+      this.saveMode === 'update'
+        ? 'Failed to Update Post. '
+        : 'Failed to Create Post. ';
 
     if (error.status === 0) {
       errorMsg += 'KA32 Servers are temporarily down.';
@@ -319,10 +332,12 @@ export class PostFormComponent implements OnInit {
     const homePost = JSON.parse(JSON.stringify(formValues));
     homePost.homePostId = +this.postId;
 
-    this.managePostsService.updatePost(homePost).subscribe(
-      resp => this.onSuccessfulSave(resp, 'Post updated succesfully'),
-      error => this.onFailedSave(error)
-    );
+    this.managePostsService
+      .updatePost(homePost)
+      .subscribe(
+        resp => this.onSuccessfulSave(resp, 'Post updated succesfully'),
+        error => this.onFailedSave(error)
+      );
   }
 
   //#endregion
@@ -351,13 +366,13 @@ export class PostFormComponent implements OnInit {
       } else {
         this.snackBarService.showError('Something went wrong. Please Retry.');
         console.log('Error: Invalid saveMode status: ' + this.saveMode);
-        console.log('Please report us this issue via email to: contact@ka32.in');
+        console.log(
+          'Please report us this issue via email to: contact@ka32.in'
+        );
         this.router.navigate([this.constHelper.HomePageUrl]);
       }
-
     }
   }
-
 
   public cancelPost(): void {
     this.navigateToPreviousPage();
@@ -373,14 +388,36 @@ export class PostFormComponent implements OnInit {
     }
   }
 
-  showDepositInWords(deposit: number): void {
+  public showDepositInWords(deposit: number): void {
     this.depositInWords = this.managePostsService.convertNumberToWords(deposit);
   }
 
-  showDepositLabel(state: boolean) {
+  public showDepositLabel(state: boolean) {
     if (!state) {
       this.depositInWords = '';
     }
+  }
+
+  public verifyContactNumber() {
+    if (this.savePostFormGroup.controls.contactPhone.invalid) {
+      this.snackBarService.showError('Please enter a valid mobile number');
+      return;
+    }
+
+    const dialogRef = this.dialog.open(VerifyMobileNumberComponent, {
+      width: '300px',
+      disableClose: true,
+      data: {
+        message: this.contactPhone.value
+      }
+    });
+
+    const self = this;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'yes') {
+        // self.deletePost(homePostId);
+      }
+    });
   }
   //#endregion
 

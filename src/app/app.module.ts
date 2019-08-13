@@ -1,22 +1,24 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CustomMaterialModule } from './CustomMaterial.module';
 import { RouterModule, Routes } from '@angular/router';
-import { ConstHelperService } from './services/const-helper.service';
 import { appRoutes } from './routes';
-import { HomeComponent } from './components/home/home.component';
 import { AnonymousAuthGuardSerivce } from './services/anonymous-auth-guard-serivce';
 import { AuthGuardService } from './services/auth-guard.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
+
+import { ConstHelperService } from './services/const-helper.service';
+
+import { HomeComponent } from './components/home/home.component';
 import { SearchHomeComponent } from './components/search-home/search-home.component';
 import { SearchHomeResultsComponent } from './components/search-home-results/search-home-results.component';
 import { AreaService } from './services/area.service';
 import { HomeTypeService } from './services/home-type.service';
 import { SearchHomeService } from './services/search-home.service';
-import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { LoginComponent } from './components/login/login.component';
 import { TitleService } from './services/title.service';
@@ -33,6 +35,7 @@ import { PostStatusTypePipe } from './pipes/post-status-type.pipe';
 import { ConfirmDialogComponent } from './components/common/confirm-dialog/confirm-dialog.component';
 import { PostFormComponent } from './components/post-owner/post-form/post-form.component';
 import { EditPostComponent } from './components/post-owner/edit-post/edit-post.component';
+import { VerifyMobileNumberComponent } from './components/post-owner/verify-mobile-number/verify-mobile-number.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,8 @@ import { EditPostComponent } from './components/post-owner/edit-post/edit-post.c
     SnackBarErrorComponent,
     SnackBarInfoComponent,
     ConfirmDialogComponent,
-    PostStatusTypePipe
+    PostStatusTypePipe,
+    VerifyMobileNumberComponent
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -75,6 +79,11 @@ import { EditPostComponent } from './components/post-owner/edit-post/edit-post.c
     CanDeactivateManagePostsService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [SnackBarErrorComponent, SnackBarInfoComponent, ConfirmDialogComponent]
+  entryComponents: [
+    SnackBarErrorComponent,
+    SnackBarInfoComponent,
+    ConfirmDialogComponent,
+    VerifyMobileNumberComponent
+  ]
 })
 export class AppModule {}
