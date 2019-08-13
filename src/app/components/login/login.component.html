@@ -12,7 +12,19 @@
                 </button>
             </div>
 
-            <div *ngIf="showLoader"><i class="fas fa-spinner fa-spin fa-2x"></i><span class="margin-left-20">Signing you in...</span></div>
+            <div fxFlex="80" *ngIf="!showLoader" class="margin-top-30">
+                Or
+            </div>
+
+            <div fxFlex="80" *ngIf="!showLoader" class="margin-top-30">
+                <button mat-stroked-button color="primary" (click)="phoneLogin()">
+                    <i class="fas fa-mobile-alt fa-2x"></i>&nbsp;
+                    Verify with Phone
+                </button>
+            </div>
+
+            <div *ngIf="showLoader"><i class="fas fa-spinner fa-spin fa-2x"></i><span class="margin-left-20">Signing you
+                    in...</span></div>
         </div>
     </mat-card>
 </div>
