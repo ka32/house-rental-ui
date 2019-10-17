@@ -17,6 +17,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/fontawesome.css"
         integrity="sha384-BzCy2fixOYd0HObpx3GMefNqdbA7Qjcc91RgYeDjrHTIEXqiF00jKvgQG0+zY/7I" crossorigin="anonymous">
     <script src="//connect.facebook.net/en_US/sdk.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/4.2.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.2.0/firebaseui.css" />
+
+
 </head>
 
 <body>
@@ -42,32 +46,10 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-        // initialize Account Kit with CSRF protection
-        AccountKit_OnInteractive = function () {
-            AccountKit.init(
-                {
-                    appId: "444498579231295",
-                    state: "CVr@)jxDzC&SMJEUou:?ZIA_GS]g0Md1UwJ4",
-                    version: "v1.1",
-                    fbAppEventsEnabled: true
-                }
-            );
-        };
 
     </script>
 
     <app-root></app-root>
-
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="/__/firebase/6.3.5/firebase-app.js"></script>
-
-    <!-- Add Firebase products that you want to use -->
-    <script src="/__/firebase/6.3.5/firebase-auth.js"></script>
-    <!-- Initialize Firebase -->
-    <script src="/__/firebase/init.js"></script>
-
-    <!-- HTTPS required. HTTP will give a 403 forbidden response -->
-    <script src="https://sdk.accountkit.com/en_US/sdk.js"></script>
 
 </body>
 

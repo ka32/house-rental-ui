@@ -12,7 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ConstHelperService } from './services/const-helper.service';
-
+import { ThirdPartyObjectsService } from './services/third-party-objects.service';
 import { HomeComponent } from './components/home/home.component';
 import { SearchHomeComponent } from './components/search-home/search-home.component';
 import { SearchHomeResultsComponent } from './components/search-home-results/search-home-results.component';
@@ -65,6 +65,7 @@ import { VerifyMobileNumberComponent } from './components/post-owner/verify-mobi
   ],
   providers: [
     ConstHelperService,
+    ThirdPartyObjectsService,
     AuthService,
     AuthGuardService,
     AnonymousAuthGuardSerivce,

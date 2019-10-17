@@ -6,20 +6,22 @@
             </div>
 
             <div fxFlex="80" *ngIf="!showLoader" class="margin-top-30">
-                <button mat-stroked-button color="primary" (click)="login()">
-                    <i class="fab fa-facebook-square fa-2x"></i>&nbsp;
-                    Continue with Facebook
+                <button mat-stroked-button color="primary" (click)="firebaseLogin()">
+                    <i class="fas fa-mobile-alt fa-2x"></i>&nbsp; Sign In with Phone
                 </button>
+            </div>
+            <div fxFlex="80" *ngIf="!showLoader" class="margin-top-30">
+                <div id="firebaseui-auth-container">
+                </div>
             </div>
 
             <div fxFlex="80" *ngIf="!showLoader" class="margin-top-30">
                 Or
             </div>
-
             <div fxFlex="80" *ngIf="!showLoader" class="margin-top-30">
-                <button mat-stroked-button color="primary" (click)="phoneLogin()">
-                    <i class="fas fa-mobile-alt fa-2x"></i>&nbsp;
-                    Verify with Phone
+                <button mat-stroked-button color="primary" (click)="login()">
+                    <i class="fab fa-facebook-square fa-2x"></i>&nbsp;
+                    Sign in with Facebook
                 </button>
             </div>
 

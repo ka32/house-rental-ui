@@ -40,3 +40,5 @@ Thumbs.db
 
 # Self signed certificate files
 /self_signed_cert
+
+package-lock.json
