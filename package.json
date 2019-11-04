@@ -1,6 +1,6 @@
 {
   "name": "ka32-web-client",
-  "version": "0.0.0",
+  "version": "1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --ssl true --ssl-cert  self_signed_cert/server.crt --ssl-key self_signed_cert/server.key",
@@ -54,5 +54,10 @@
     "ts-node": "~8.2.0",
     "tslint": "^5.17.0",
     "typescript": "^3.4.5"
-  }
+  },
+  "description": "KA32 House Rental Web Client",
+  "main": "index.html",
+  "repository": "https://github.com/ka32/rental-homes-ui.git",
+  "author": "Nagesh Kumar <nagesh.andani@gmail.com>",
+  "license": "Private"
 }
